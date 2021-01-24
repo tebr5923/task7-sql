@@ -15,6 +15,7 @@ CREATE TABLE students(
 	last_name varchar(50) NOT NULL,
 	FOREIGN KEY(group_id)
 		REFERENCES groups(id)
+        ON DELETE SET NULL
 );
 
 CREATE TABLE courses(
