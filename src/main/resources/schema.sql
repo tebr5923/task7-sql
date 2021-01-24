@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS courses;
 
 CREATE TABLE groups(
 	id serial PRIMARY KEY,
-	name varchar(5) NOT NULL,
+	name varchar(5) NOT NULL
 );
 
 CREATE TABLE students(
@@ -21,7 +21,7 @@ CREATE TABLE students(
 CREATE TABLE courses(
 	id serial PRIMARY KEY,
 	name varchar(50) NOT NULL,
-	description text NOT NULL,
+	description text NOT NULL
 );
 
 CREATE TABLE students_courses(
