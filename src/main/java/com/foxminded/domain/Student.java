@@ -2,13 +2,13 @@ package com.foxminded.domain;
 
 import java.util.Objects;
 
-public class Students {
+public class Student {
     private int id;
     private int groupId;
     private String firstName;
     private String lastName;
 
-    public Students() {
+    public Student() {
     }
 
     public int getId() {
@@ -47,8 +47,8 @@ public class Students {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Students students = (Students) o;
-        return id == students.id && groupId == students.groupId && Objects.equals(firstName, students.firstName) && Objects.equals(lastName, students.lastName);
+        Student student = (Student) o;
+        return id == student.id && groupId == student.groupId && Objects.equals(firstName, student.firstName) && Objects.equals(lastName, student.lastName);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class Students {
 
     @Override
     public String toString() {
-        return "Students{" +
+        return "Student{" +
                 "id=" + id +
                 ", groupId=" + groupId +
                 ", firstName='" + firstName + '\'' +
