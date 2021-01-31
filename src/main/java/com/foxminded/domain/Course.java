@@ -2,12 +2,12 @@ package com.foxminded.domain;
 
 import java.util.Objects;
 
-public class Courses {
+public class Course {
     private int id;
     private String name;
     private String description;
 
-    public Courses() {
+    public Course() {
     }
 
     public int getId() {
@@ -38,8 +38,8 @@ public class Courses {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Courses courses = (Courses) o;
-        return id == courses.id && Objects.equals(name, courses.name) && Objects.equals(description, courses.description);
+        Course course = (Course) o;
+        return id == course.id && Objects.equals(name, course.name) && Objects.equals(description, course.description);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class Courses {
 
     @Override
     public String toString() {
-        return "Courses{" +
+        return "Course{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
