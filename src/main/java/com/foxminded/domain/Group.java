@@ -2,11 +2,11 @@ package com.foxminded.domain;
 
 import java.util.Objects;
 
-public class Groups {
+public class Group {
     private int id;
     private String name;
 
-    public Groups() {
+    public Group() {
     }
 
     public int getId() {
@@ -29,8 +29,8 @@ public class Groups {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Groups groups = (Groups) o;
-        return id == groups.id && Objects.equals(name, groups.name);
+        Group group = (Group) o;
+        return id == group.id && Objects.equals(name, group.name);
     }
 
     @Override
