@@ -1,22 +1,12 @@
 package com.foxminded.domain;
 
-import java.util.Objects;
-
-public class Student {
-    private int id;
+public class Student extends Model {
     private int groupId;
     private String firstName;
     private String lastName;
 
     public Student() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        super();
     }
 
     public int getGroupId() {
@@ -44,25 +34,12 @@ public class Student {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Student student = (Student) o;
-        return id == student.id && groupId == student.groupId && Objects.equals(firstName, student.firstName) && Objects.equals(lastName, student.lastName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, groupId, firstName, lastName);
-    }
-
-    @Override
     public String toString() {
         return "Student{" +
-                "id=" + id +
-                ", groupId=" + groupId +
+                "groupId=" + groupId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", id=" + id +
                 '}';
     }
 }
