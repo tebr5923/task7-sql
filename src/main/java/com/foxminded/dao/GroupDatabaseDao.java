@@ -71,15 +71,14 @@ public class GroupDatabaseDao implements GroupDao {
 
     @Override
     public void save(Group model) {
-        String sql = "INSERT INTO groups (id, name) values(?,?)";
+        String sql = "INSERT INTO groups (id, name) values(DEFAULT,?)";
 
         try (final Connection connection = connectionFactory.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)
-             //final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
-            statement.setInt(1, model.getId());
-            statement.setString(2, model.getName());
+            statement.setString(1, model.getName());
             statement.execute();
+            System.out.println("save ok");
         } catch (SQLException e) {
             e.printStackTrace();
         }
