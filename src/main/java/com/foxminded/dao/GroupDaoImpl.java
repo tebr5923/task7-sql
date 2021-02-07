@@ -15,7 +15,6 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public Group getByName(String name) {
         String sql = "SELECT * FROM groups g WHERE g.name=?";
-        Group group = null;
 
         try (final Connection connection = daoFactory.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -23,15 +22,16 @@ public class GroupDaoImpl implements GroupDao {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    group = new Group();
+                    Group group = new Group();
                     group.setId(resultSet.getInt("id"));
                     group.setName(resultSet.getString("name"));
+                    return group;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return group;
+        return new Group(-1, "");
     }
 
     @Override
@@ -42,7 +42,6 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public Group getById(Integer id) {
         String sql = "SELECT * FROM groups g WHERE g.id=?";
-        Group group = null;
 
         try (final Connection connection = daoFactory.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)
@@ -51,15 +50,16 @@ public class GroupDaoImpl implements GroupDao {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    group = new Group();
+                    Group group = new Group();
                     group.setId(resultSet.getInt("id"));
                     group.setName(resultSet.getString("name"));
+                    return group;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return group;
+        return new Group(-1, "");
     }
 
     @Override
