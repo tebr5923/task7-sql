@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DaoFactory {
     private static final String PROP_FILE_NAME = "db.properties";
@@ -55,11 +54,9 @@ public class DaoFactory {
 
     private void createDB() {
         ResourceFileReader resourceFileReader = new ResourceFileReader();
-        Stream<String> stringStream;
         String script = "";
         try {
-            stringStream = resourceFileReader.read(SCHEMA_FILE_NAME);
-            script = stringStream.collect(Collectors.joining());
+            script = resourceFileReader.read(SCHEMA_FILE_NAME).collect(Collectors.joining());
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
