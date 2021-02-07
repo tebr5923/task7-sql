@@ -7,18 +7,14 @@ import java.sql.*;
 import java.util.List;
 
 public class GroupDatabaseDao implements GroupDao {
-    private final ConnectionFactory connectionFactory;
-
-    public GroupDatabaseDao() {
-        this.connectionFactory = new ConnectionFactory();
-    }
+    private final DaoFactory daoFactory = DaoFactory.getInstance();
 
     @Override
     public Group getByName(String name) {
         String sql = "SELECT * FROM groups g WHERE g.name=?";
         Group group = null;
 
-        try (final Connection connection = connectionFactory.getConnection();
+        try (final Connection connection = daoFactory.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, name);
@@ -46,7 +42,7 @@ public class GroupDatabaseDao implements GroupDao {
         String sql = "SELECT * FROM groups g WHERE g.id=?";
         Group group = null;
 
-        try (final Connection connection = connectionFactory.getConnection();
+        try (final Connection connection = daoFactory.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setInt(1, id);
@@ -73,8 +69,8 @@ public class GroupDatabaseDao implements GroupDao {
     public void save(Group model) {
         String sql = "INSERT INTO groups (id, name) values(DEFAULT,?)";
 
-        try (final Connection connection = connectionFactory.getConnection();
-             final PreparedStatement statement = connection.prepareStatement(sql)
+        try (final Connection connection = daoFactory.getConnection();
+            final PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, model.getName());
             statement.execute();
