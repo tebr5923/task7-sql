@@ -3,10 +3,13 @@ package com.foxminded.dao;
 import com.foxminded.domain.Group;
 import com.foxminded.domain.Student;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public class GroupDatabaseDao implements GroupDao {
+public class GroupDaoImpl implements GroupDao {
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
     @Override
@@ -15,8 +18,7 @@ public class GroupDatabaseDao implements GroupDao {
         Group group = null;
 
         try (final Connection connection = daoFactory.getConnection();
-             final PreparedStatement statement = connection.prepareStatement(sql)
-        ) {
+             final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -70,7 +72,7 @@ public class GroupDatabaseDao implements GroupDao {
         String sql = "INSERT INTO groups (id, name) values(DEFAULT,?)";
 
         try (final Connection connection = daoFactory.getConnection();
-            final PreparedStatement statement = connection.prepareStatement(sql)
+             final PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, model.getName());
             statement.execute();
