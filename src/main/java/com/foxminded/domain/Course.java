@@ -1,11 +1,18 @@
 package com.foxminded.domain;
 
-public class Course extends Model {
+import java.util.Objects;
+
+public class Course {
+    private int id;
     private String name;
     private String description;
 
-    public Course() {
-        super();
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -25,10 +32,24 @@ public class Course extends Model {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return id == course.id && name.equals(course.name) && description.equals(course.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description);
+    }
+
+    @Override
     public String toString() {
         return "Course{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

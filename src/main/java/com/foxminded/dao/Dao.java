@@ -1,10 +1,8 @@
 package com.foxminded.dao;
 
-import com.foxminded.domain.Model;
-
 import java.util.List;
 
-public interface Dao<T extends Model, K> {
+public interface Dao<T, K> {
     T getById(K id);
 
     List<T> getAll();
