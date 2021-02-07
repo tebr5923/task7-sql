@@ -64,7 +64,7 @@ public class DaoFactory {
             e.printStackTrace();
         }
         try (final Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(script)) {
+             final PreparedStatement statement = connection.prepareStatement(script)) {
             statement.execute();
             System.out.println("table create");
         } catch (SQLException e) {
