@@ -1,7 +1,6 @@
 package com.foxminded.dao;
 
 import com.foxminded.domain.Group;
-import com.foxminded.domain.Student;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,11 +31,6 @@ public class GroupDaoImpl implements GroupDao {
             e.printStackTrace();
         }
         return new Group(-1, "");
-    }
-
-    @Override
-    public List<Student> getStudents() {
-        return null;
     }
 
     @Override
