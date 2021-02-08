@@ -1,10 +1,12 @@
 package com.foxminded.domain;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Group {
     private int id;
     private String name;
+    private List<Student> students;
 
     public Group() {
     }
@@ -28,6 +30,14 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     @Override
