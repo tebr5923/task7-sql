@@ -11,5 +11,5 @@ public interface Dao<T, K> {
 
     void update(T model);
 
-    void delete(T model);
+    void delete(T model) throws DaoException;
 }

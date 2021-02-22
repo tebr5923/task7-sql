@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS students_courses;
+DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS groups;
+DROP TABLE IF EXISTS courses;
+DROP SEQUENCE IF EXISTS group_id_seq;
