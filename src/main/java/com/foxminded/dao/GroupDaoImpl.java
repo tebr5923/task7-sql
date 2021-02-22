@@ -27,8 +27,12 @@ public class GroupDaoImpl implements GroupDao {
                     System.out.println("GET BY name OK... group with name " + name);
                     return group;
                 }
+            } catch (SQLException e) {
+                System.err.println(" Wrong ResultSet!!! ");
+                e.printStackTrace();
             }
         } catch (SQLException e) {
+            System.err.println(" Wrong query!!! ");
             e.printStackTrace();
         }
         System.err.println("NOT FOUND!!!!... group with name " + name);
@@ -49,8 +53,12 @@ public class GroupDaoImpl implements GroupDao {
                     System.out.println("GET BY id OK... group with id " + id);
                     return group;
                 }
+            }catch (SQLException e) {
+                System.err.println(" Wrong ResultSet!!! ");
+                e.printStackTrace();
             }
         } catch (SQLException e) {
+            System.err.println(" Wrong query!!! ");
             e.printStackTrace();
         }
         System.err.println("NOT FOUND!!!!... group with id " + id);
@@ -67,6 +75,7 @@ public class GroupDaoImpl implements GroupDao {
                 groupList.add(new Group(resultSet.getInt("id"), resultSet.getString("name")));
             }
         } catch (SQLException e) {
+            System.err.println(" Wrong query!!! ");
             e.printStackTrace();
         }
         System.out.println("GET ALL group OK...");
@@ -85,8 +94,12 @@ public class GroupDaoImpl implements GroupDao {
                 if (generatedKeys.next()) {
                     model.setId(generatedKeys.getInt(1));
                 }
+            }catch (SQLException e) {
+                System.err.println(" Wrong ResultSet!!! ");
+                e.printStackTrace();
             }
         } catch (SQLException e) {
+            System.err.println(" Wrong query!!! ");
             e.printStackTrace();
         }
     }
@@ -101,6 +114,7 @@ public class GroupDaoImpl implements GroupDao {
             statement.executeUpdate();
             System.out.println("UPDATE OK... group " + model);
         } catch (SQLException e) {
+            System.err.println(" Wrong query!!! ");
             e.printStackTrace();
         }
     }
@@ -117,6 +131,7 @@ public class GroupDaoImpl implements GroupDao {
             }
             System.out.println("DELETE OK... group " + model);
         } catch (SQLException e) {
+            System.err.println(" Wrong query!!! ");
             e.printStackTrace();
         }
     }
