@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 @SuppressWarnings("squid:S106")
-public class DaoFactory {
+public class DaoFactory implements ConnectionProvider{
     private static final String PROP_FILE_NAME = "db.properties";
 
     private final Properties properties;
@@ -29,6 +29,7 @@ public class DaoFactory {
     }
 
 
+    @Override
     public Connection getConnection() {
         Connection connection;
         try {

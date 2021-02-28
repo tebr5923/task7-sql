@@ -42,7 +42,7 @@ class GroupDaoImplTest {
 
     @BeforeEach
     void setUp() {
-        groupDao = new GroupDaoImpl();
+        groupDao = new GroupDaoImpl(new DaoFactory());
         String sql = "INSERT INTO groups (name) values('save1');\n" +
                 "INSERT INTO groups (name) values('save2');";
         try (Statement statement = connection.createStatement()) {
@@ -56,7 +56,7 @@ class GroupDaoImplTest {
 
     @AfterEach
     void tearDown() {
-        groupDao = new GroupDaoImpl();
+        groupDao = new GroupDaoImpl(new DaoFactory());
         //String sql = "TRUNCATE TABLE groups;";
         //String sql = "DELETE FROM groups;DBCC CHECKIDENT ('groups', RESEED, 1);";
         String sql = "DELETE FROM groups;ALTER SEQUENCE groups_id_seq RESTART WITH 101";

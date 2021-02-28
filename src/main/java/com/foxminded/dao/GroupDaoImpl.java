@@ -11,16 +11,16 @@ public class GroupDaoImpl implements GroupDao {
     private static final String WRONG_QUERY = " Wrong query!!! ";
     private static final String WRONG_RESULT_SET = " Wrong ResultSet!!! ";
 
-    private final DaoFactory daoFactory;
+    private final ConnectionProvider connectionProvider;
 
-    public GroupDaoImpl() {
-        this.daoFactory = new DaoFactory();
+    public GroupDaoImpl(ConnectionProvider connectionProvider) {
+        this.connectionProvider = connectionProvider;
     }
 
     @Override
     public Group getByName(String name) {
         String sql = "SELECT * FROM groups g WHERE g.name=?";
-        try (final Connection connection = daoFactory.getConnection();
+        try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -46,7 +46,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public Group getById(Integer id) {
         String sql = "SELECT * FROM groups g WHERE g.id=?";
-        try (final Connection connection = daoFactory.getConnection();
+        try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -73,7 +73,7 @@ public class GroupDaoImpl implements GroupDao {
     public List<Group> getAll() {
         List<Group> groupList = new ArrayList<>();
         String sql = "SELECT * FROM groups";
-        try (final Connection connection = daoFactory.getConnection();
+        try (final Connection connection = connectionProvider.getConnection();
              final ResultSet resultSet = connection.createStatement().executeQuery(sql)) {
             while (resultSet.next()) {
                 groupList.add(new Group(resultSet.getInt("id"), resultSet.getString("name")));
@@ -90,7 +90,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public void save(Group model) {
         String sql = "INSERT INTO groups (id, name) values(DEFAULT,?)";
-        try (final Connection connection = daoFactory.getConnection();
+        try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, model.getName());
             statement.executeUpdate();
@@ -112,7 +112,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public void update(Group model) {
         String sql = "UPDATE groups set name=? WHERE id=?";
-        try (final Connection connection = daoFactory.getConnection();
+        try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, model.getName());
             statement.setInt(2, model.getId());
@@ -127,7 +127,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public void delete(Group model) throws DaoException {
         String sql = "DELETE FROM groups WHERE id=?";
-        try (final Connection connection = daoFactory.getConnection();
+        try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, model.getId());
             if (statement.executeUpdate() == 0) {
