@@ -1,6 +1,11 @@
 package com.foxminded.dao;
 
 import com.foxminded.domain.Group;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,7 +22,7 @@ class GroupDaoImplTest {
 
     private GroupDaoImpl groupDao;
 
-    @org.junit.jupiter.api.BeforeAll
+    @BeforeAll
     public static void createTables() {
         //create Tables
         dbFactory = new DBFactory();
@@ -27,7 +32,7 @@ class GroupDaoImplTest {
         System.out.println("Connection to H2 open");
     }
 
-    @org.junit.jupiter.api.AfterAll
+    @AfterAll
     public static void dropTables() throws SQLException {
         //drop Tables
         dbFactory.dropTables();
@@ -35,7 +40,7 @@ class GroupDaoImplTest {
         System.out.println("Connection to H2 close");
     }
 
-    @org.junit.jupiter.api.BeforeEach
+    @BeforeEach
     void setUp() {
         groupDao = new GroupDaoImpl();
         String sql = "INSERT INTO groups (name) values('save1');\n" +
@@ -49,7 +54,7 @@ class GroupDaoImplTest {
         }
     }
 
-    @org.junit.jupiter.api.AfterEach
+    @AfterEach
     void tearDown() {
         groupDao = new GroupDaoImpl();
         //String sql = "TRUNCATE TABLE groups;";
@@ -64,7 +69,7 @@ class GroupDaoImplTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getByName_shouldReturnGroup_whenGetGroupWhichExist() {
         Group expected = new Group(102, "save2");
 
@@ -73,7 +78,7 @@ class GroupDaoImplTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getByName_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() {
         Group expected = new Group(-1, "");
 
@@ -82,7 +87,7 @@ class GroupDaoImplTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getById_shouldReturnGroup_whenGetGroupWhichExist() {
         Group expected = new Group(102, "save2");
 
@@ -91,7 +96,7 @@ class GroupDaoImplTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getById_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() {
         Group expected = new Group(-1, "");
 
@@ -100,7 +105,7 @@ class GroupDaoImplTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAll_shouldReturnAllGroups() {
         List<Group> expected = new ArrayList<>();
         expected.add(new Group(101, "save1"));
@@ -111,7 +116,7 @@ class GroupDaoImplTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void save_shouldSaveGroup_whenSavingGroupNotExist() {
         Group expected = new Group();
         expected.setName("new-1");
@@ -136,7 +141,7 @@ class GroupDaoImplTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void update_shouldUpdateGroup_whenUpdatingGroupExist() {
         Group expected = new Group(101, "upd");
         groupDao.update(expected);
@@ -160,7 +165,7 @@ class GroupDaoImplTest {
         assertEquals(expected, actual);
     }
 
-    /*@org.junit.jupiter.api.Test
+    /*@Test
     void update_shouldNotUpdateGroup_whenUpdatingGroupNotExist()*/
 
 }
