@@ -2,7 +2,9 @@ package com.foxminded.dao;
 
 import com.foxminded.domain.Group;
 
+import java.util.Optional;
+
 public interface GroupDao extends Dao<Group, Integer> {
-    Group getByName(String name);
+    Optional<Group> getByName(String name);
 
 }

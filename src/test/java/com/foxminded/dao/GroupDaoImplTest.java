@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -71,36 +72,36 @@ class GroupDaoImplTest {
 
     @Test
     void getByName_shouldReturnGroup_whenGetGroupWhichExist() {
-        Group expected = new Group(102, "save2");
+        Optional<Group> expected = Optional.of(new Group(102, "save2"));
 
-        Group actual = groupDao.getByName("save2");
+        Optional<Group> actual = groupDao.getByName("save2");
 
         assertEquals(expected, actual);
     }
 
     @Test
     void getByName_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() {
-        Group expected = new Group(-1, "");
+        Optional<Group> expected = Optional.empty();
 
-        Group actual = groupDao.getByName("ntExt");
+        Optional<Group> actual = groupDao.getByName("ntExt");
 
         assertEquals(expected, actual);
     }
 
     @Test
     void getById_shouldReturnGroup_whenGetGroupWhichExist() {
-        Group expected = new Group(102, "save2");
+        Optional<Group> expected = Optional.of(new Group(102, "save2"));
 
-        Group actual = groupDao.getById(102);
+        Optional<Group> actual = groupDao.getById(102);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void getById_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() {
-        Group expected = new Group(-1, "");
+        Optional<Group> expected = Optional.empty();
 
-        Group actual = groupDao.getById(55);
+        Optional<Group> actual = groupDao.getById(55);
 
         assertEquals(expected, actual);
     }

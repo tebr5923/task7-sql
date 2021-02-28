@@ -5,6 +5,7 @@ import com.foxminded.domain.Group;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("squid:S106")
 public class GroupDaoImpl implements GroupDao {
@@ -18,7 +19,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Group getByName(String name) {
+    public Optional<Group> getByName(String name) {
         String sql = "SELECT * FROM groups g WHERE g.name=?";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -29,7 +30,7 @@ public class GroupDaoImpl implements GroupDao {
                     group.setId(resultSet.getInt("id"));
                     group.setName(resultSet.getString("name"));
                     System.out.println("GET BY name OK... group with name " + name);
-                    return group;
+                    return Optional.of(group);
                 }
             } catch (SQLException e) {
                 System.err.println(WRONG_RESULT_SET);
@@ -40,11 +41,11 @@ public class GroupDaoImpl implements GroupDao {
             e.printStackTrace();
         }
         System.err.println("NOT FOUND!!!!... group with name " + name);
-        return new Group(-1, "");
+        return Optional.empty();
     }
 
     @Override
-    public Group getById(Integer id) {
+    public Optional<Group> getById(Integer id) {
         String sql = "SELECT * FROM groups g WHERE g.id=?";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -55,7 +56,7 @@ public class GroupDaoImpl implements GroupDao {
                     group.setId(resultSet.getInt("id"));
                     group.setName(resultSet.getString("name"));
                     System.out.println("GET BY id OK... group with id " + id);
-                    return group;
+                    return Optional.of(group);
                 }
             } catch (SQLException e) {
                 System.err.println(WRONG_RESULT_SET);
@@ -66,7 +67,7 @@ public class GroupDaoImpl implements GroupDao {
             e.printStackTrace();
         }
         System.err.println("NOT FOUND!!!!... group with id " + id);
-        return new Group(-1, "");
+        return Optional.empty();
     }
 
     @Override
