@@ -75,6 +75,7 @@ public class GroupDaoImpl implements GroupDao {
                 groupList.add(new Group(resultSet.getInt("id"), resultSet.getString("name")));
             }
         } catch (SQLException e) {
+            // one more catch?
             System.err.println(" Wrong query!!! ");
             e.printStackTrace();
         }
@@ -133,6 +134,7 @@ public class GroupDaoImpl implements GroupDao {
         } catch (SQLException e) {
             System.err.println(" Wrong query!!! ");
             e.printStackTrace();
+            throw new DaoException(" Wrong query!!! ", e);
         }
     }
 }
