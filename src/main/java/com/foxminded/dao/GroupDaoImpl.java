@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("squid:S106")
 public class GroupDaoImpl implements GroupDao {
     private final DaoFactory daoFactory;
 

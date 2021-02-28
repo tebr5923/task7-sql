@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+@SuppressWarnings("squid:S106")
 public class DaoFactory {
     private static final String PROP_FILE_NAME = "db.properties";
 
