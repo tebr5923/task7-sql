@@ -30,12 +30,6 @@ public class DaoFactory {
 
     public Connection getConnection() {
         Connection connection;
-
-        try {
-            Class.forName(properties.getProperty("db.driver"));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         try {
             connection = DriverManager.getConnection(
                     properties.getProperty("db.url"),
