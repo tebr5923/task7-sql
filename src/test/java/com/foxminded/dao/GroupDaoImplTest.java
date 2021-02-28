@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -58,8 +57,6 @@ class GroupDaoImplTest {
     @AfterEach
     void tearDown() {
         groupDao = new GroupDaoImpl(new DaoFactory());
-        //String sql = "TRUNCATE TABLE groups;";
-        //String sql = "DELETE FROM groups;DBCC CHECKIDENT ('groups', RESEED, 1);";
         String sql = "DELETE FROM groups;ALTER SEQUENCE groups_id_seq RESTART WITH 101";
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
@@ -123,22 +120,8 @@ class GroupDaoImplTest {
         expected.setName("new-1");
         groupDao.save(expected);
 
-        Group actual = new Group();
-        String query = "SELECT * FROM groups g WHERE g.name='new-1'";
-        try (ResultSet resultSet = connection.createStatement().executeQuery(query)) {
-            try {
-                if (resultSet.next()) {
-                    actual.setId(resultSet.getInt("id"));
-                    actual.setName(resultSet.getString("name"));
-                }
-            } catch (SQLException e) {
-                System.err.println(" Wrong ResultSet!!! ");
-                e.printStackTrace();
-            }
-        } catch (SQLException e) {
-            System.err.println(" Wrong query!!! ");
-            e.printStackTrace();
-        }
+        Group actual = groupDao.getByName("new-1").orElse(new Group(-1, ""));
+
         assertEquals(expected, actual);
     }
 
@@ -147,22 +130,8 @@ class GroupDaoImplTest {
         Group expected = new Group(101, "upd");
         groupDao.update(expected);
 
-        Group actual = new Group();
-        String query = "SELECT * FROM groups g WHERE g.id=101";
-        try (ResultSet resultSet = connection.createStatement().executeQuery(query)) {
-            try {
-                if (resultSet.next()) {
-                    actual.setId(resultSet.getInt("id"));
-                    actual.setName(resultSet.getString("name"));
-                }
-            } catch (SQLException e) {
-                System.err.println(" Wrong ResultSet!!! ");
-                e.printStackTrace();
-            }
-        } catch (SQLException e) {
-            System.err.println(" Wrong query!!! ");
-            e.printStackTrace();
-        }
+        Group actual = groupDao.getById(101).orElse(new Group(-1, ""));
+
         assertEquals(expected, actual);
     }
 
