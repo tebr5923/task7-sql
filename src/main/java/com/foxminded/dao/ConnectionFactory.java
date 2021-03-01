@@ -9,12 +9,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 @SuppressWarnings("squid:S106")
-public class DaoFactory implements ConnectionProvider{
+public class ConnectionFactory implements ConnectionProvider{
     private static final String PROP_FILE_NAME = "db.properties";
 
     private final Properties properties;
 
-    public DaoFactory() {
+    public ConnectionFactory() {
         this.properties = new Properties();
         try (InputStream inputStream = this.getClass()
                 .getClassLoader()

@@ -28,7 +28,7 @@ class GroupDaoImplTest {
         dbFactory = new DBFactory();
         System.out.println("try create table...");
         dbFactory.createTables();
-        connection = new DaoFactory().getConnection();
+        connection = new ConnectionFactory().getConnection();
         System.out.println("Connection to H2 open");
     }
 
@@ -42,7 +42,7 @@ class GroupDaoImplTest {
 
     @BeforeEach
     void setUp() {
-        groupDao = new GroupDaoImpl(new DaoFactory());
+        groupDao = new GroupDaoImpl(new ConnectionFactory());
         String sql = "INSERT INTO groups (name) values('save1');\n" +
                 "INSERT INTO groups (name) values('save2');";
         try (Statement statement = connection.createStatement()) {
@@ -56,7 +56,7 @@ class GroupDaoImplTest {
 
     @AfterEach
     void tearDown() {
-        groupDao = new GroupDaoImpl(new DaoFactory());
+        groupDao = new GroupDaoImpl(new ConnectionFactory());
         String sql = "DELETE FROM groups;ALTER SEQUENCE groups_id_seq RESTART WITH 101";
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);

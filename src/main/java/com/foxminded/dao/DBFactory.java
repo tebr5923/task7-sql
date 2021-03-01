@@ -57,8 +57,8 @@ public class DBFactory {
     }
 
     private void executeScript(String script, String message) {
-        DaoFactory daoFactory = new DaoFactory();
-        try (final Connection connection = daoFactory.getConnection();
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        try (final Connection connection = connectionFactory.getConnection();
              final Statement statement = connection.createStatement()) {
             statement.execute(script);
             System.out.printf("table %s%n", message);
