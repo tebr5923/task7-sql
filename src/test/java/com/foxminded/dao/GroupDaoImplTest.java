@@ -68,7 +68,7 @@ class GroupDaoImplTest {
     }
 
     @Test
-    void getByName_shouldReturnGroup_whenGetGroupWhichExist() {
+    void getByName_shouldReturnGroup_whenGetGroupWhichExist() throws DaoException {
         Group group = new Group();
         group.setId(102);
         group.setName("save2");
@@ -80,7 +80,7 @@ class GroupDaoImplTest {
     }
 
     @Test
-    void getByName_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() {
+    void getByName_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() throws DaoException {
         Optional<Group> expected = Optional.empty();
 
         Optional<Group> actual = groupDao.getByName("ntExt");
@@ -89,7 +89,7 @@ class GroupDaoImplTest {
     }
 
     @Test
-    void getById_shouldReturnGroup_whenGetGroupWhichExist() {
+    void getById_shouldReturnGroup_whenGetGroupWhichExist() throws DaoException {
         Group group = new Group();
         group.setId(102);
         group.setName("save2");
@@ -101,7 +101,7 @@ class GroupDaoImplTest {
     }
 
     @Test
-    void getById_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() {
+    void getById_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() throws DaoException {
         Optional<Group> expected = Optional.empty();
 
         Optional<Group> actual = groupDao.getById(55);
@@ -110,7 +110,7 @@ class GroupDaoImplTest {
     }
 
     @Test
-    void getAll_shouldReturnAllGroups() {
+    void getAll_shouldReturnAllGroups() throws DaoException {
         Group group1 = new Group();
         group1.setId(101);
         group1.setName("save1");
@@ -127,7 +127,7 @@ class GroupDaoImplTest {
     }
 
     @Test
-    void save_shouldSaveGroup_whenSavingGroupNotExist() {
+    void save_shouldSaveGroup_whenSavingGroupNotExist() throws DaoException {
         Group expected = new Group();
         expected.setName("new-1");
         groupDao.save(expected);
@@ -141,7 +141,7 @@ class GroupDaoImplTest {
     }
 
     @Test
-    void update_shouldUpdateGroup_whenUpdatingGroupExist() {
+    void update_shouldUpdateGroup_whenUpdatingGroupExist() throws DaoException {
         Group expected = new Group();
         expected.setId(101);
         expected.setName("upd");

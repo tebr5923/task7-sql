@@ -19,7 +19,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Optional<Group> getByName(String name) {
+    public Optional<Group> getByName(String name) throws DaoException {
         String sql = "SELECT * FROM groups g WHERE g.name=?";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -34,18 +34,18 @@ public class GroupDaoImpl implements GroupDao {
                 }
             } catch (SQLException e) {
                 System.err.println(WRONG_RESULT_SET);
-                e.printStackTrace();
+                throw new DaoException(WRONG_RESULT_SET, e);
             }
         } catch (SQLException e) {
             System.err.println(WRONG_QUERY);
-            e.printStackTrace();
+            throw new DaoException(WRONG_QUERY, e);
         }
         System.err.println("NOT FOUND!!!!... group with name " + name);
         return Optional.empty();
     }
 
     @Override
-    public Optional<Group> getById(Integer id) {
+    public Optional<Group> getById(Integer id) throws DaoException {
         String sql = "SELECT * FROM groups g WHERE g.id=?";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -60,18 +60,18 @@ public class GroupDaoImpl implements GroupDao {
                 }
             } catch (SQLException e) {
                 System.err.println(WRONG_RESULT_SET);
-                e.printStackTrace();
+                throw new DaoException(WRONG_RESULT_SET, e);
             }
         } catch (SQLException e) {
             System.err.println(WRONG_QUERY);
-            e.printStackTrace();
+            throw new DaoException(WRONG_QUERY, e);
         }
         System.err.println("NOT FOUND!!!!... group with id " + id);
         return Optional.empty();
     }
 
     @Override
-    public List<Group> getAll() {
+    public List<Group> getAll() throws DaoException {
         List<Group> groupList = new ArrayList<>();
         String sql = "SELECT * FROM groups";
         try (final Connection connection = connectionProvider.getConnection();
@@ -83,16 +83,15 @@ public class GroupDaoImpl implements GroupDao {
                 groupList.add(group);
             }
         } catch (SQLException e) {
-            // one more catch?
             System.err.println(WRONG_QUERY);
-            e.printStackTrace();
+            throw new DaoException(WRONG_QUERY, e);
         }
         System.out.println("GET ALL group OK...");
         return groupList;
     }
 
     @Override
-    public void save(Group model) {
+    public void save(Group model) throws DaoException {
         String sql = "INSERT INTO groups (id, name) values(DEFAULT,?)";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -105,16 +104,16 @@ public class GroupDaoImpl implements GroupDao {
                 }
             } catch (SQLException e) {
                 System.err.println(WRONG_RESULT_SET);
-                e.printStackTrace();
+                throw new DaoException(WRONG_RESULT_SET, e);
             }
         } catch (SQLException e) {
             System.err.println(WRONG_QUERY);
-            e.printStackTrace();
+            throw new DaoException(WRONG_QUERY, e);
         }
     }
 
     @Override
-    public void update(Group model) {
+    public void update(Group model) throws DaoException {
         String sql = "UPDATE groups set name=? WHERE id=?";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -124,7 +123,7 @@ public class GroupDaoImpl implements GroupDao {
             System.out.println("UPDATE OK... group " + model);
         } catch (SQLException e) {
             System.err.println(WRONG_QUERY);
-            e.printStackTrace();
+            throw new DaoException(WRONG_QUERY, e);
         }
     }
 
@@ -141,7 +140,6 @@ public class GroupDaoImpl implements GroupDao {
             System.out.println("DELETE OK... group " + model);
         } catch (SQLException e) {
             System.err.println(WRONG_QUERY);
-            e.printStackTrace();
             throw new DaoException(WRONG_QUERY, e);
         }
     }
