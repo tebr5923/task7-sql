@@ -77,7 +77,10 @@ public class GroupDaoImpl implements GroupDao {
         try (final Connection connection = connectionProvider.getConnection();
              final ResultSet resultSet = connection.createStatement().executeQuery(sql)) {
             while (resultSet.next()) {
-                groupList.add(new Group(resultSet.getInt("id"), resultSet.getString("name")));
+                Group group = new Group();
+                group.setId(resultSet.getInt("id"));
+                group.setName(resultSet.getString("name"));
+                groupList.add(group);
             }
         } catch (SQLException e) {
             // one more catch?

@@ -69,7 +69,10 @@ class GroupDaoImplTest {
 
     @Test
     void getByName_shouldReturnGroup_whenGetGroupWhichExist() {
-        Optional<Group> expected = Optional.of(new Group(102, "save2"));
+        Group group = new Group();
+        group.setId(102);
+        group.setName("save2");
+        Optional<Group> expected = Optional.of(group);
 
         Optional<Group> actual = groupDao.getByName("save2");
 
@@ -87,7 +90,10 @@ class GroupDaoImplTest {
 
     @Test
     void getById_shouldReturnGroup_whenGetGroupWhichExist() {
-        Optional<Group> expected = Optional.of(new Group(102, "save2"));
+        Group group = new Group();
+        group.setId(102);
+        group.setName("save2");
+        Optional<Group> expected = Optional.of(group);
 
         Optional<Group> actual = groupDao.getById(102);
 
@@ -105,9 +111,15 @@ class GroupDaoImplTest {
 
     @Test
     void getAll_shouldReturnAllGroups() {
+        Group group1 = new Group();
+        group1.setId(101);
+        group1.setName("save1");
+        Group group2 = new Group();
+        group2.setId(102);
+        group2.setName("save2");
         List<Group> expected = new ArrayList<>();
-        expected.add(new Group(101, "save1"));
-        expected.add(new Group(102, "save2"));
+        expected.add(group1);
+        expected.add(group2);
 
         List<Group> actual = groupDao.getAll();
 
@@ -120,17 +132,25 @@ class GroupDaoImplTest {
         expected.setName("new-1");
         groupDao.save(expected);
 
-        Group actual = groupDao.getByName("new-1").orElse(new Group(-1, ""));
+        Group emptyGroup = new Group();
+        emptyGroup.setId(-1);
+        emptyGroup.setName("");
+        Group actual = groupDao.getByName("new-1").orElse(emptyGroup);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void update_shouldUpdateGroup_whenUpdatingGroupExist() {
-        Group expected = new Group(101, "upd");
+        Group expected = new Group();
+        expected.setId(101);
+        expected.setName("upd");
         groupDao.update(expected);
 
-        Group actual = groupDao.getById(101).orElse(new Group(-1, ""));
+        Group emptyGroup = new Group();
+        emptyGroup.setId(-1);
+        emptyGroup.setName("");
+        Group actual = groupDao.getById(101).orElse(emptyGroup);
 
         assertEquals(expected, actual);
     }
