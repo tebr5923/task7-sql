@@ -1,6 +1,8 @@
 package com.foxminded.dao;
 
 import com.foxminded.domain.Group;
+import com.foxminded.mapper.GroupMapper;
+import com.foxminded.mapper.Mapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.Optional;
 
 @SuppressWarnings("squid:S106")
 public class GroupDaoImpl implements GroupDao {
+    private static final Mapper<Group> GROUP_MAPPER = new GroupMapper();
     private final ConnectionProvider connectionProvider;
 
     public GroupDaoImpl(ConnectionProvider connectionProvider) {
@@ -23,9 +26,7 @@ public class GroupDaoImpl implements GroupDao {
             statement.setString(1, name);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    Group group = new Group();
-                    group.setId(resultSet.getInt("id"));
-                    group.setName(resultSet.getString("name"));
+                    Group group = GROUP_MAPPER.map(resultSet);
                     System.out.println("GET BY name OK... group with name " + name);
                     return Optional.of(group);
                 }
@@ -46,9 +47,7 @@ public class GroupDaoImpl implements GroupDao {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    Group group = new Group();
-                    group.setId(resultSet.getInt("id"));
-                    group.setName(resultSet.getString("name"));
+                    Group group = GROUP_MAPPER.map(resultSet);
                     System.out.println("GET BY id OK... group with id " + id);
                     return Optional.of(group);
                 }
@@ -68,9 +67,7 @@ public class GroupDaoImpl implements GroupDao {
         try (final Connection connection = connectionProvider.getConnection();
              final ResultSet resultSet = connection.createStatement().executeQuery(sql)) {
             while (resultSet.next()) {
-                Group group = new Group();
-                group.setId(resultSet.getInt("id"));
-                group.setName(resultSet.getString("name"));
+                Group group = GROUP_MAPPER.map(resultSet);
                 groupList.add(group);
             }
         } catch (SQLException e) {
@@ -105,8 +102,7 @@ public class GroupDaoImpl implements GroupDao {
         String sql = "UPDATE groups set name=? WHERE id=?";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, model.getName());
-            statement.setInt(2, model.getId());
+            GROUP_MAPPER.map(statement,model);
             statement.executeUpdate();
             System.out.println("UPDATE OK... group " + model);
         } catch (SQLException e) {
