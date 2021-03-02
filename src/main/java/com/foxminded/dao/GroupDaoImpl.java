@@ -9,9 +9,6 @@ import java.util.Optional;
 
 @SuppressWarnings("squid:S106")
 public class GroupDaoImpl implements GroupDao {
-    private static final String WRONG_QUERY = " Wrong query!!! ";
-    private static final String WRONG_RESULT_SET = " Wrong ResultSet!!! ";
-
     private final ConnectionProvider connectionProvider;
 
     public GroupDaoImpl(ConnectionProvider connectionProvider) {
@@ -32,13 +29,10 @@ public class GroupDaoImpl implements GroupDao {
                     System.out.println("GET BY name OK... group with name " + name);
                     return Optional.of(group);
                 }
-            } catch (SQLException e) {
-                System.err.println(WRONG_RESULT_SET);
-                throw new DaoException(WRONG_RESULT_SET, e);
             }
         } catch (SQLException e) {
-            System.err.println(WRONG_QUERY);
-            throw new DaoException(WRONG_QUERY, e);
+            System.err.println("cant get group by name!!!");
+            throw new DaoException("cant get group by name!!!", e);
         }
         System.err.println("NOT FOUND!!!!... group with name " + name);
         return Optional.empty();
@@ -58,13 +52,10 @@ public class GroupDaoImpl implements GroupDao {
                     System.out.println("GET BY id OK... group with id " + id);
                     return Optional.of(group);
                 }
-            } catch (SQLException e) {
-                System.err.println(WRONG_RESULT_SET);
-                throw new DaoException(WRONG_RESULT_SET, e);
             }
         } catch (SQLException e) {
-            System.err.println(WRONG_QUERY);
-            throw new DaoException(WRONG_QUERY, e);
+            System.err.println("cant get group by id!!!");
+            throw new DaoException("cant get group by id!!!", e);
         }
         System.err.println("NOT FOUND!!!!... group with id " + id);
         return Optional.empty();
@@ -83,8 +74,8 @@ public class GroupDaoImpl implements GroupDao {
                 groupList.add(group);
             }
         } catch (SQLException e) {
-            System.err.println(WRONG_QUERY);
-            throw new DaoException(WRONG_QUERY, e);
+            System.err.println("cant get all groups");
+            throw new DaoException("cant get all groups", e);
         }
         System.out.println("GET ALL group OK...");
         return groupList;
@@ -102,13 +93,10 @@ public class GroupDaoImpl implements GroupDao {
                 if (generatedKeys.next()) {
                     model.setId(generatedKeys.getInt(1));
                 }
-            } catch (SQLException e) {
-                System.err.println(WRONG_RESULT_SET);
-                throw new DaoException(WRONG_RESULT_SET, e);
             }
         } catch (SQLException e) {
-            System.err.println(WRONG_QUERY);
-            throw new DaoException(WRONG_QUERY, e);
+            System.err.println("cant save group");
+            throw new DaoException("cant save group", e);
         }
     }
 
@@ -122,8 +110,8 @@ public class GroupDaoImpl implements GroupDao {
             statement.executeUpdate();
             System.out.println("UPDATE OK... group " + model);
         } catch (SQLException e) {
-            System.err.println(WRONG_QUERY);
-            throw new DaoException(WRONG_QUERY, e);
+            System.err.println("cant update group");
+            throw new DaoException("cant update group", e);
         }
     }
 
@@ -139,8 +127,8 @@ public class GroupDaoImpl implements GroupDao {
             }
             System.out.println("DELETE OK... group " + model);
         } catch (SQLException e) {
-            System.err.println(WRONG_QUERY);
-            throw new DaoException(WRONG_QUERY, e);
+            System.err.println("cant delete group");
+            throw new DaoException("cant delete group", e);
         }
     }
 }
