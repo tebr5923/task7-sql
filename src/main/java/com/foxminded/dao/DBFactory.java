@@ -15,14 +15,16 @@ public class DBFactory {
     private static final String CREATE_TABLES_FILE_NAME = "schema.sql";
     private static final String DROP_TABLES_FILE_NAME = "drop.sql";
 
+    private final ConnectionProvider connectionProvider;
     private final String createTablesFileName;
     private final String dropTablesFileName;
 
-    public DBFactory() {
-        this(CREATE_TABLES_FILE_NAME, DROP_TABLES_FILE_NAME);
+    public DBFactory(ConnectionProvider connectionProvider) {
+        this(connectionProvider, CREATE_TABLES_FILE_NAME, DROP_TABLES_FILE_NAME);
     }
 
-    public DBFactory(String createTablesFileName, String dropTablesFileName) {
+    public DBFactory(ConnectionProvider connectionProvider, String createTablesFileName, String dropTablesFileName) {
+        this.connectionProvider = connectionProvider;
         this.createTablesFileName = createTablesFileName;
         this.dropTablesFileName = dropTablesFileName;
     }
@@ -57,8 +59,7 @@ public class DBFactory {
     }
 
     private void executeScript(String script, String message) {
-        ConnectionFactory connectionFactory = new ConnectionFactory();
-        try (final Connection connection = connectionFactory.getConnection();
+        try (final Connection connection = connectionProvider.getConnection();
              final Statement statement = connection.createStatement()) {
             statement.execute(script);
             System.out.printf("table %s%n", message);

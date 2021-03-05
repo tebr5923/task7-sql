@@ -25,7 +25,7 @@ class GroupDaoImplTest {
     @BeforeAll
     public static void createTables() {
         //create Tables
-        dbFactory = new DBFactory();
+        dbFactory = new DBFactory(new ConnectionFactory());
         System.out.println("try create table...");
         dbFactory.createTables();
         connection = new ConnectionFactory().getConnection();
