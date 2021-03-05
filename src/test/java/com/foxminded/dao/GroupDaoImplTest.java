@@ -123,14 +123,12 @@ class GroupDaoImplTest {
 
     @Test
     void save_shouldSaveGroup_whenSavingGroupNotExist() throws DaoException {
-        Group expected = new Group();
-        expected.setName("new-1");
-        groupDao.save(expected);
+        Group group = new Group();
+        group.setName("new-1");
+        groupDao.save(group);
+        Optional<Group> expected = Optional.of(group);
 
-        Group emptyGroup = new Group();
-        emptyGroup.setId(-1);
-        emptyGroup.setName("");
-        Group actual = groupDao.getByName("new-1").orElse(emptyGroup);
+        Optional<Group> actual = groupDao.getByName("new-1");
 
         assertEquals(expected, actual);
     }
