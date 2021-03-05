@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class GroupDaoImplTest {
     private static Connection connection;
@@ -81,11 +82,9 @@ class GroupDaoImplTest {
 
     @Test
     void getByName_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() throws DaoException {
-        Optional<Group> expected = Optional.empty();
-
         Optional<Group> actual = groupDao.getByName("ntExt");
 
-        assertEquals(expected, actual);
+        assertFalse(actual.isPresent());
     }
 
     @Test
@@ -102,11 +101,9 @@ class GroupDaoImplTest {
 
     @Test
     void getById_shouldReturnEmptyGroup_whenGetGroupWhichNotExist() throws DaoException {
-        Optional<Group> expected = Optional.empty();
-
         Optional<Group> actual = groupDao.getById(55);
 
-        assertEquals(expected, actual);
+        assertFalse(actual.isPresent());
     }
 
     @Test
