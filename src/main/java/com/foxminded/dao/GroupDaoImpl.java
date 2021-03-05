@@ -83,7 +83,7 @@ public class GroupDaoImpl implements GroupDao {
         String sql = "INSERT INTO groups (id, name) values(DEFAULT,?)";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, model.getName());
+            GROUP_MAPPER.map(statement, model);
             statement.executeUpdate();
             System.out.println("SAVE OK..." + " group with name " + model.getName());
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
@@ -102,7 +102,7 @@ public class GroupDaoImpl implements GroupDao {
         String sql = "UPDATE groups set name=? WHERE id=?";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
-            GROUP_MAPPER.map(statement,model);
+            GROUP_MAPPER.map(statement, model);
             statement.executeUpdate();
             System.out.println("UPDATE OK... group " + model);
         } catch (SQLException e) {

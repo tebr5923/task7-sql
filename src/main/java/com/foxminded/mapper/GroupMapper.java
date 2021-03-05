@@ -18,6 +18,8 @@ public class GroupMapper implements Mapper<Group> {
     @Override
     public void map(PreparedStatement statement, Group model) throws SQLException {
         statement.setString(1, model.getName());
-        statement.setInt(2, model.getId());
+        if (model.getId() != 0) {
+            statement.setInt(2, model.getId());
+        }
     }
 }
