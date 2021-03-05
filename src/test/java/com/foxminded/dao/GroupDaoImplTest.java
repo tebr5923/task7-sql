@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,9 +114,7 @@ class GroupDaoImplTest {
         Group group2 = new Group();
         group2.setId(102);
         group2.setName("save2");
-        List<Group> expected = new ArrayList<>();
-        expected.add(group1);
-        expected.add(group2);
+        List<Group> expected = Arrays.asList(group1, group2);
 
         List<Group> actual = groupDao.getAll();
 
