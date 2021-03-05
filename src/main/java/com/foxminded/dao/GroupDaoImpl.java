@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("squid:S106")
+@SuppressWarnings("squid:S106") //dont use logger in this task
 public class GroupDaoImpl implements GroupDao {
     private static final Mapper<Group> GROUP_MAPPER = new GroupMapper();
     private final ConnectionProvider connectionProvider;

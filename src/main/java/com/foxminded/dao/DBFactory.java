@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("squid:S106")
+@SuppressWarnings("squid:S106") //dont use logger in this task
 public class DBFactory {
     private static final String CREATE_TABLES_FILE_NAME = "schema.sql";
     private static final String DROP_TABLES_FILE_NAME = "drop.sql";

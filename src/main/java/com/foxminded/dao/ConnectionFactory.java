@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-@SuppressWarnings("squid:S106")
+@SuppressWarnings("squid:S106") //dont use logger in this task
 public class ConnectionFactory implements ConnectionProvider{
     private static final String PROP_FILE_NAME = "db.properties";
 
