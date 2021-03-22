@@ -1,5 +1,10 @@
 package com.foxminded.domain;
 
+import com.foxminded.dao.ConnectionFactory;
+import com.foxminded.dao.DaoException;
+import com.foxminded.domain.loader.Loader;
+import com.foxminded.domain.loader.StudentsLoaderFromGroup;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -27,7 +32,11 @@ public class Group {
         this.name = name;
     }
 
-    public List<Student> getStudents() {
+    public List<Student> getStudents() throws DaoException {
+        if (students == null) {
+            Loader<Student> studentLoader = new StudentsLoaderFromGroup(new ConnectionFactory());
+            students = studentLoader.load(id);
+        }
         return students;
     }
 
