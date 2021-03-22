@@ -20,7 +20,8 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public Optional<Group> getByName(String name) throws DaoException {
-        String sql = "SELECT * FROM groups g WHERE g.name=?";
+        //String sql = "select g.id as group_id, g.name, s.id as student_id, s.first_name, s.last_name from groups g left join students s on s.group_id=g.id  where g.name=?;";
+        String sql = "select g.id as group_id, g.name from groups g where g.name=?;";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
@@ -41,7 +42,8 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public Optional<Group> getById(Integer id) throws DaoException {
-        String sql = "SELECT * FROM groups g WHERE g.id=?";
+        //String sql = "select g.id as group_id, g.name, s.id as student_id, s.first_name, s.last_name from groups g left join students s on s.group_id=g.id  where g.id=?;";
+        String sql = "select g.id as group_id, g.name from groups g where g.id=?;";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -63,7 +65,8 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public List<Group> getAll() throws DaoException {
         List<Group> groupList = new ArrayList<>();
-        String sql = "SELECT * FROM groups";
+//        String sql = "select g.id as group_id, g.name, s.id as student_id, s.first_name, s.last_name from groups g left join students s on s.group_id=g.id";
+        String sql = "select g.id as group_id, g.name from groups g;";
         try (final Connection connection = connectionProvider.getConnection();
              final ResultSet resultSet = connection.createStatement().executeQuery(sql)) {
             while (resultSet.next()) {
@@ -80,7 +83,7 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public void save(Group model) throws DaoException {
-        String sql = "INSERT INTO groups (id, name) values(DEFAULT,?)";
+        String sql = "INSERT INTO groups (id, name) values(DEFAULT,?);";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             GROUP_MAPPER.map(statement, model);
@@ -99,7 +102,7 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public void update(Group model) throws DaoException {
-        String sql = "UPDATE groups set name=? WHERE id=?";
+        String sql = "UPDATE groups set name=? WHERE id=?;";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             GROUP_MAPPER.map(statement, model);
@@ -113,7 +116,7 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public void delete(Group model) throws DaoException {
-        String sql = "DELETE FROM groups WHERE id=?";
+        String sql = "DELETE FROM groups WHERE id=?;";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, model.getId());

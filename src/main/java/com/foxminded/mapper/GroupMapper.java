@@ -10,7 +10,7 @@ public class GroupMapper implements Mapper<Group> {
     @Override
     public Group map(ResultSet resultSet) throws SQLException {
         Group group = new Group();
-        group.setId(resultSet.getInt("id"));
+        group.setId(resultSet.getInt("group_id"));
         group.setName(resultSet.getString("name"));
         return group;
     }

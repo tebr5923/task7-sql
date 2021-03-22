@@ -48,7 +48,7 @@ class GroupDaoImplTest {
                 "INSERT INTO groups (name) values('save2');";
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
-            System.out.println("execute query for data save");
+            System.out.println("execute query for test data save");
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("WRONG QUERY");
@@ -57,11 +57,10 @@ class GroupDaoImplTest {
 
     @AfterEach
     void tearDown() {
-        groupDao = new GroupDaoImpl(new ConnectionFactory());
-        String sql = "DELETE FROM groups;ALTER SEQUENCE groups_id_seq RESTART WITH 101";
+        String sql = "DELETE FROM groups;ALTER SEQUENCE groups_id_seq RESTART WITH 101;";
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
-            System.out.println("execute query for data save");
+            System.out.println("execute query for clear test data");
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("WRONG QUERY");
@@ -135,15 +134,13 @@ class GroupDaoImplTest {
 
     @Test
     void update_shouldUpdateGroup_whenUpdatingGroupExist() throws DaoException {
-        Group expected = new Group();
-        expected.setId(101);
-        expected.setName("upd");
-        groupDao.update(expected);
+        Group group = new Group();
+        group.setId(101);
+        group.setName("upd");
+        groupDao.update(group);
+        Optional<Group> expected = Optional.of(group);
 
-        Group emptyGroup = new Group();
-        emptyGroup.setId(-1);
-        emptyGroup.setName("");
-        Group actual = groupDao.getById(101).orElse(emptyGroup);
+        Optional<Group> actual = groupDao.getById(101);
 
         assertEquals(expected, actual);
     }
