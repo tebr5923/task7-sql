@@ -1,11 +1,13 @@
 package com.foxminded.domain;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Course {
     private int id;
     private String name;
     private String description;
+    private List<Student> students;
 
     public Course() {
     }
@@ -32,6 +34,14 @@ public class Course {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     @Override
