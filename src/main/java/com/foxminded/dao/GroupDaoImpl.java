@@ -13,7 +13,7 @@ import java.util.Optional;
 @SuppressWarnings("squid:S106") //dont use logger in this task
 public class GroupDaoImpl implements GroupDao {
     private static final Mapper<Group> GROUP_MAPPER = new GroupMapper();
-    private static final StudentDao studentDao = new StudentDaoImpl(); //temporary static
+    private static final StudentDao studentDao = new StudentDaoImpl(); //TODO: must be not static
     private final ConnectionProvider connectionProvider;
 
     public GroupDaoImpl(ConnectionProvider connectionProvider) {
