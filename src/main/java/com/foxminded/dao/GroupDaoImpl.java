@@ -1,6 +1,7 @@
 package com.foxminded.dao;
 
 import com.foxminded.domain.Group;
+import com.foxminded.domain.Student;
 import com.foxminded.mapper.GroupMapper;
 import com.foxminded.mapper.Mapper;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 @SuppressWarnings("squid:S106") //dont use logger in this task
 public class GroupDaoImpl implements GroupDao {
     private static final Mapper<Group> GROUP_MAPPER = new GroupMapper();
+    private static final StudentDao studentDao = new StudentDaoImpl(); //temporary static
     private final ConnectionProvider connectionProvider;
 
     public GroupDaoImpl(ConnectionProvider connectionProvider) {
@@ -128,6 +130,18 @@ public class GroupDaoImpl implements GroupDao {
         } catch (SQLException e) {
             System.err.println("cant delete group");
             throw new DaoException("cant delete group", e);
+        }
+    }
+
+    private class DbGroup extends Group {
+        private DbGroup(Group group) {
+            setId(group.getId());
+            setName(group.getName());
+        }
+
+        @Override
+        public List<Student> getStudents() throws DaoException {
+            return studentDao.getStudentsByGroup(getId());
         }
     }
 }
