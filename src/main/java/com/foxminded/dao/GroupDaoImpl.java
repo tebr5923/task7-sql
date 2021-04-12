@@ -29,7 +29,7 @@ public class GroupDaoImpl implements GroupDao {
             statement.setString(1, name);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    Group group = GROUP_MAPPER.map(resultSet);
+                    Group group = new DbGroup(GROUP_MAPPER.map(resultSet));
                     System.out.println("GET BY name OK... group with name " + name);
                     return Optional.of(group);
                 }
@@ -143,5 +143,6 @@ public class GroupDaoImpl implements GroupDao {
         public List<Student> getStudents() throws DaoException {
             return studentDao.getStudentsByGroup(getId());
         }
+
     }
 }
