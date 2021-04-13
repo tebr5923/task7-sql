@@ -27,7 +27,7 @@ public class Group {
         this.name = name;
     }
 
-    public List<Student> getStudents() throws Exception {
+    public List<Student> getStudents() {
         return students;
     }
 

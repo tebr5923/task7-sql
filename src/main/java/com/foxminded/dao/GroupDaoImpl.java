@@ -139,8 +139,15 @@ public class GroupDaoImpl implements GroupDao {
         }
 
         @Override
-        public List<Student> getStudents() throws DaoException {
-            return studentDao.getStudentsByGroup(getId());
+        public List<Student> getStudents() {
+            List<Student> students;
+            try {
+                students = studentDao.getStudentsByGroup(getId());
+            } catch (DaoException e) {
+                System.err.println("cant load students");
+                throw new IllegalStateException("cant load students", e);
+            }
+            return students;
         }
 
     }
