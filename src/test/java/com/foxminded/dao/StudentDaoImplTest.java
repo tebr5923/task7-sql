@@ -1,7 +1,6 @@
 package com.foxminded.dao;
 
 import com.foxminded.domain.Student;
-import com.foxminded.domain.loader.StudentsLoaderFromGroup;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
