@@ -13,7 +13,7 @@ import java.util.Optional;
 @SuppressWarnings("squid:S106") //dont use logger in this task
 public class GroupDaoImpl implements GroupDao {
     private static final Mapper<Group> GROUP_MAPPER = new GroupMapper();
-    private static final StudentDao studentDao = new StudentDaoImpl(); //TODO: must be not static
+    private static final StudentDao studentDao = new StudentDaoImpl(new ConnectionFactory()); //TODO: must be not static
     private final ConnectionProvider connectionProvider;
 
     public GroupDaoImpl(ConnectionProvider connectionProvider) {
@@ -22,7 +22,6 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public Optional<Group> getByName(String name) throws DaoException {
-        //String sql = "select g.id as group_id, g.name, s.id as student_id, s.first_name, s.last_name from groups g left join students s on s.group_id=g.id  where g.name=?;";
         String sql = "select g.id as group_id, g.name from groups g where g.name=?;";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -44,14 +43,14 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public Optional<Group> getById(Integer id) throws DaoException {
-        //String sql = "select g.id as group_id, g.name, s.id as student_id, s.first_name, s.last_name from groups g left join students s on s.group_id=g.id  where g.id=?;";
         String sql = "select g.id as group_id, g.name from groups g where g.id=?;";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    Group group = GROUP_MAPPER.map(resultSet);
+                    Group group = new DbGroup(GROUP_MAPPER.map(resultSet));
+                    //Group group = GROUP_MAPPER.map(resultSet);
                     System.out.println("GET BY id OK... group with id " + id);
                     return Optional.of(group);
                 }
@@ -67,12 +66,12 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public List<Group> getAll() throws DaoException {
         List<Group> groupList = new ArrayList<>();
-//        String sql = "select g.id as group_id, g.name, s.id as student_id, s.first_name, s.last_name from groups g left join students s on s.group_id=g.id";
         String sql = "select g.id as group_id, g.name from groups g;";
         try (final Connection connection = connectionProvider.getConnection();
              final ResultSet resultSet = connection.createStatement().executeQuery(sql)) {
             while (resultSet.next()) {
-                Group group = GROUP_MAPPER.map(resultSet);
+                Group group = new DbGroup(GROUP_MAPPER.map(resultSet));
+                //Group group = GROUP_MAPPER.map(resultSet);
                 groupList.add(group);
             }
         } catch (SQLException e) {
