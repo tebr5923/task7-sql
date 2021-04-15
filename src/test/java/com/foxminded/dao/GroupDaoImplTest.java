@@ -16,27 +16,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GroupDaoImplTest {
-    private static Connection connection;
-    private static DBFactory dbFactory;
-
+class GroupDaoImplTest extends AbstractDaoTest{
     private GroupDaoImpl groupDao;
-
-    @BeforeAll
-    public static void createTables() {
-        dbFactory = new DBFactory(new ConnectionFactory());
-        System.out.println("try create table...");
-        dbFactory.createTables();
-        connection = new ConnectionFactory().getConnection();
-        System.out.println("Connection to H2 open");
-    }
-
-    @AfterAll
-    public static void dropTables() throws SQLException {
-        dbFactory.dropTables();
-        connection.close();
-        System.out.println("Connection to H2 close");
-    }
 
     @BeforeEach
     void setUp() {

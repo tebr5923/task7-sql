@@ -3,7 +3,6 @@ package com.foxminded.dao;
 import com.foxminded.domain.Student;
 import org.junit.jupiter.api.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
@@ -11,27 +10,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StudentDaoImplTest {
-    private static Connection connection;
-    private static DBFactory dbFactory;
-
+class StudentDaoImplTest extends AbstractDaoTest{
     private StudentDao studentDao;
-
-    @BeforeAll
-    public static void createTables() {
-        dbFactory = new DBFactory(new ConnectionFactory());
-        System.out.println("try create table...");
-        dbFactory.createTables();
-        connection = new ConnectionFactory().getConnection();
-        System.out.println("Connection to H2 open");
-    }
-
-    @AfterAll
-    public static void dropTables() throws SQLException {
-        dbFactory.dropTables();
-        connection.close();
-        System.out.println("Connection to H2 close");
-    }
 
     @BeforeEach
     void setUp() {
