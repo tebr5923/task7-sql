@@ -30,21 +30,11 @@ public class DBFactory {
     }
 
     public void createTables() {
-        Optional<String> script = getScript(createTablesFileName);
-        if (script.isPresent()) {
-            executeScript(script.get(), "CREATE");
-        } else {
-            System.err.println("tables NOT CREATE - EMPTY SCRIPT");
-        }
+        executeScript(createTablesFileName, "CREATE");
     }
 
     public void dropTables() {
-        Optional<String> script = getScript(dropTablesFileName);
-        if (script.isPresent()) {
-            executeScript(script.get(), "DROP");
-        } else {
-            System.err.println("tables NOT DROP - EMPTY SCRIPT");
-        }
+        executeScript(dropTablesFileName, "DROP");
     }
 
     private Optional<String> getScript(String fileName) {
@@ -58,7 +48,7 @@ public class DBFactory {
         return Optional.empty();
     }
 
-    private void executeScript(String script, String message) {
+    private void executeQuery(String script, String message) {
         try (final Connection connection = connectionProvider.getConnection();
              final Statement statement = connection.createStatement()) {
             statement.execute(script);
@@ -66,6 +56,15 @@ public class DBFactory {
         } catch (SQLException e) {
             System.err.printf("table NOT %s%n", message);
             throw new IllegalStateException(String.format("cant %s table", message), e);
+        }
+    }
+
+    private void executeScript(String fileName, String message){
+        Optional<String> script = getScript(fileName);
+        if (script.isPresent()) {
+            executeQuery(script.get(), message);
+        } else {
+            System.err.printf("tables NOT %s - EMPTY SCRIPT%n", message);
         }
     }
 }
