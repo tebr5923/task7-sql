@@ -14,8 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GroupDaoImplTest {
     private static Connection connection;
@@ -25,7 +24,6 @@ class GroupDaoImplTest {
 
     @BeforeAll
     public static void createTables() {
-        //create Tables
         dbFactory = new DBFactory(new ConnectionFactory());
         System.out.println("try create table...");
         dbFactory.createTables();
@@ -35,7 +33,6 @@ class GroupDaoImplTest {
 
     @AfterAll
     public static void dropTables() throws SQLException {
-        //drop Tables
         dbFactory.dropTables();
         connection.close();
         System.out.println("Connection to H2 close");
@@ -69,14 +66,14 @@ class GroupDaoImplTest {
 
     @Test
     void getByName_shouldReturnGroup_whenGetGroupWhichExist() throws DaoException {
-        Group group = new Group();
-        group.setId(102);
-        group.setName("save2");
-        Optional<Group> expected = Optional.of(group);
+        Group expected = new Group();
+        expected.setId(102);
+        expected.setName("save2");
 
         Optional<Group> actual = groupDao.getByName("save2");
 
-        assertEquals(expected, actual);
+        assertTrue(actual.isPresent());
+        assertEquals(expected, actual.get());
     }
 
     @Test
@@ -88,14 +85,14 @@ class GroupDaoImplTest {
 
     @Test
     void getById_shouldReturnGroup_whenGetGroupWhichExist() throws DaoException {
-        Group group = new Group();
-        group.setId(102);
-        group.setName("save2");
-        Optional<Group> expected = Optional.of(group);
+        Group expected = new Group();
+        expected.setId(102);
+        expected.setName("save2");
 
         Optional<Group> actual = groupDao.getById(102);
 
-        assertEquals(expected, actual);
+        assertTrue(actual.isPresent());
+        assertEquals(expected, actual.get());
     }
 
     @Test
@@ -122,27 +119,27 @@ class GroupDaoImplTest {
 
     @Test
     void save_shouldSaveGroup_whenSavingGroupNotExist() throws DaoException {
-        Group group = new Group();
-        group.setName("new-1");
-        groupDao.save(group);
-        Optional<Group> expected = Optional.of(group);
+        Group expected = new Group();
+        expected.setName("new-1");
+        groupDao.save(expected);
 
         Optional<Group> actual = groupDao.getByName("new-1");
 
-        assertEquals(expected, actual);
+        assertTrue(actual.isPresent());
+        assertEquals(expected, actual.get());
     }
 
     @Test
     void update_shouldUpdateGroup_whenUpdatingGroupExist() throws DaoException {
-        Group group = new Group();
-        group.setId(101);
-        group.setName("upd");
-        groupDao.update(group);
-        Optional<Group> expected = Optional.of(group);
+        Group expected = new Group();
+        expected.setId(101);
+        expected.setName("upd");
+        groupDao.update(expected);
 
         Optional<Group> actual = groupDao.getById(101);
 
-        assertEquals(expected, actual);
+        assertTrue(actual.isPresent());
+        assertEquals(expected, actual.get());
     }
 
     /*@Test
