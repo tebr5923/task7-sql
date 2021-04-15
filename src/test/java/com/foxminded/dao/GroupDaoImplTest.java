@@ -40,7 +40,7 @@ class GroupDaoImplTest {
 
     @BeforeEach
     void setUp() {
-        groupDao = new GroupDaoImpl(new ConnectionFactory());
+        groupDao = new GroupDaoImpl(new ConnectionFactory(), new StudentDaoImpl(new ConnectionFactory()));
         String sql = "INSERT INTO groups (name) values('save1');\n" +
                 "INSERT INTO groups (name) values('save2');";
         try (Statement statement = connection.createStatement()) {

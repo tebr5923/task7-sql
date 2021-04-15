@@ -13,11 +13,12 @@ import java.util.Optional;
 @SuppressWarnings("squid:S106") //dont use logger in this task
 public class GroupDaoImpl implements GroupDao {
     private static final Mapper<Group> GROUP_MAPPER = new GroupMapper();
-    private static final StudentDao studentDao = new StudentDaoImpl(new ConnectionFactory()); //TODO: must be not static
     private final ConnectionProvider connectionProvider;
+    private final StudentDao studentDao;
 
-    public GroupDaoImpl(ConnectionProvider connectionProvider) {
+    public GroupDaoImpl(ConnectionProvider connectionProvider, StudentDao studentDao) {
         this.connectionProvider = connectionProvider;
+        this.studentDao = studentDao;
     }
 
     @Override
@@ -50,7 +51,6 @@ public class GroupDaoImpl implements GroupDao {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     Group group = new DbGroup(GROUP_MAPPER.map(resultSet));
-                    //Group group = GROUP_MAPPER.map(resultSet);
                     System.out.println("GET BY id OK... group with id " + id);
                     return Optional.of(group);
                 }
@@ -71,7 +71,6 @@ public class GroupDaoImpl implements GroupDao {
              final ResultSet resultSet = connection.createStatement().executeQuery(sql)) {
             while (resultSet.next()) {
                 Group group = new DbGroup(GROUP_MAPPER.map(resultSet));
-                //Group group = GROUP_MAPPER.map(resultSet);
                 groupList.add(group);
             }
         } catch (SQLException e) {
