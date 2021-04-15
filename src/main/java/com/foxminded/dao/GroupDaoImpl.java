@@ -145,7 +145,7 @@ public class GroupDaoImpl implements GroupDao {
                 students = studentDao.getStudentsByGroup(getId());
             } catch (DaoException e) {
                 System.err.println("cant load students");
-                throw new IllegalStateException("cant load students", e);
+                throw new RunTimeDaoException("cant load students", e);
             }
             return students;
         }
