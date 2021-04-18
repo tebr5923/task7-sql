@@ -23,6 +23,25 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public Optional<Student> getById(Integer id) throws DaoException {
+        String sql = "select s.id, s.group_id, s.first_name, s.last_name, sc.course_id, c.name as course_name, c.description from students s\n" +
+                "left join students_courses as sc on sc.student_id=s.id  \n" +
+                "left join courses as c on c.id=sc.course_id where s.id=?;\n";
+
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Student student = STUDENT_MAPPER.map(resultSet);
+                    System.out.println("GET BY id OK... student with name " + id);
+                    return Optional.of(student);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("cant get student by id!!!");
+            throw new DaoException("cant get student by id!!!", e);
+        }
+        System.err.println("NOT FOUND!!!!... student with id " + id);
         return Optional.empty();
     }
 
@@ -49,9 +68,11 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public List<Student> getStudentsByGroup(int groupId) throws DaoException {
         List<Student> studentList = new ArrayList<>();
-        String sql = "select s.id, s.group_id, s.first_name, s.last_name from students s where s.group_id=?;";
+        String sql = "select s.id, s.group_id, s.first_name, s.last_name, sc.course_id, c.name as course_name, c.description from students s\n" +
+                "left join students_courses as sc on sc.student_id=s.id  \n" +
+                "left join courses as c on c.id=sc.course_id where s.group_id=?;\n";
         try (final Connection connection = connectionProvider.getConnection();
-             final PreparedStatement statement = connection.prepareStatement(sql)) {
+             final PreparedStatement statement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             statement.setInt(1, groupId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {

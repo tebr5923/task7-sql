@@ -1,20 +1,37 @@
 package com.foxminded.mapper;
 
+import com.foxminded.domain.Course;
 import com.foxminded.domain.Student;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentMapper implements Mapper<Student> {
+
+
     @Override
     public Student map(ResultSet resultSet) throws SQLException {
         Student student = new Student();
-        student.setId(resultSet.getInt("id"));
+        int id = resultSet.getInt("id");
+        student.setId(id);
         student.setGroupId(resultSet.getInt("group_id"));
         student.setFirstName(resultSet.getString("first_name"));
         student.setLastName(resultSet.getString("last_name"));
-
+        List<Course> courseList = new ArrayList<>();
+       do {
+            Course course = new Course();
+            course.setId(resultSet.getInt("course_id"));
+            course.setName(resultSet.getString("course_name"));
+            course.setDescription(resultSet.getString("description"));
+            courseList.add(course);
+        } while (resultSet.next() && resultSet.getInt(1) == id);
+        if (!resultSet.isAfterLast()){
+            resultSet.previous();
+        }
+        student.setCourses(courseList);
         return student;
     }
 
