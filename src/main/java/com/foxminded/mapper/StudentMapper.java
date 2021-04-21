@@ -27,7 +27,7 @@ public class StudentMapper implements Mapper<Student> {
             course.setName(resultSet.getString("course_name"));
             course.setDescription(resultSet.getString("description"));
             courseList.add(course);
-        } while (resultSet.next() && resultSet.getInt(1) == id);
+        } while (resultSet.next() && resultSet.getInt("id") == id);
         if (!resultSet.isAfterLast()){
             resultSet.previous();
         }
