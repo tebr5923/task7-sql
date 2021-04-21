@@ -24,9 +24,8 @@ abstract class AbstractDaoTest {
     protected static Student ivanov;
     protected static Student petrov;
     protected static Student romanov;
-
-    protected StudentDao studentDao;
-    protected GroupDaoImpl groupDao;
+    protected static StudentDao studentDao;
+    protected static GroupDaoImpl groupDao;
 
     @BeforeAll
     public static void createTables() {
@@ -35,6 +34,9 @@ abstract class AbstractDaoTest {
         dbFactory.createTables();
         connection = new ConnectionFactory().getConnection();
         System.out.println("Connection to H2 open");
+
+        studentDao = new StudentDaoImpl(new ConnectionFactory());
+        groupDao = new GroupDaoImpl(new ConnectionFactory(), studentDao);
 
         group101 = new Group();
         group101.setId(101);
@@ -85,9 +87,6 @@ abstract class AbstractDaoTest {
 
     @BeforeEach
     void setUp() {
-        studentDao = new StudentDaoImpl(new ConnectionFactory());
-        groupDao = new GroupDaoImpl(new ConnectionFactory(), new StudentDaoImpl(new ConnectionFactory()));
-
         String sql = "INSERT INTO groups (name) values('gr101');\n" +
                 "INSERT INTO groups (name) values('gr102');\n" +
                 "INSERT INTO students (first_name, last_name, group_id) values('Ivan','Ivanov',101);\n" +
