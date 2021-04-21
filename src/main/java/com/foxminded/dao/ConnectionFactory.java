@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 @SuppressWarnings("squid:S106") //dont use logger in this task
-public class ConnectionFactory implements ConnectionProvider{
+public class ConnectionFactory implements ConnectionProvider {
     private static final String PROP_FILE_NAME = "db.properties";
 
     private final Properties properties;
@@ -31,19 +31,18 @@ public class ConnectionFactory implements ConnectionProvider{
 
     @Override
     public Connection getConnection() {
-        Connection connection;
         try {
-            connection = DriverManager.getConnection(
+            Connection connection = DriverManager.getConnection(
                     properties.getProperty("db.url"),
                     properties.getProperty("db.user"),
                     properties.getProperty("db.password")
             );
             System.out.println("Connection OK");
+            return connection;
         } catch (SQLException e) {
             System.err.println("Connection Error");
             e.printStackTrace();
             throw new IllegalStateException(e);
         }
-        return connection;
     }
 }
