@@ -9,12 +9,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 @SuppressWarnings("squid:S106") //dont use logger in this task
-public class ConnectionFactory implements ConnectionProvider {
+public class PropertyConnectionProvider implements ConnectionProvider {
     private static final String PROP_FILE_NAME = "db.properties";
 
     private final Properties properties;
 
-    public ConnectionFactory() {
+    public PropertyConnectionProvider() {
         this.properties = new Properties();
         try (InputStream inputStream = this.getClass()
                 .getClassLoader()

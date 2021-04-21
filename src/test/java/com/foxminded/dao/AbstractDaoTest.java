@@ -29,14 +29,14 @@ abstract class AbstractDaoTest {
 
     @BeforeAll
     public static void createTables() {
-        dbFactory = new DBFactory(new ConnectionFactory());
+        dbFactory = new DBFactory(new PropertyConnectionProvider());
         System.out.println("try create table...");
         dbFactory.createTables();
-        connection = new ConnectionFactory().getConnection();
+        connection = new PropertyConnectionProvider().getConnection();
         System.out.println("Connection to H2 open");
 
-        studentDao = new StudentDaoImpl(new ConnectionFactory());
-        groupDao = new GroupDaoImpl(new ConnectionFactory(), studentDao);
+        studentDao = new StudentDaoImpl(new PropertyConnectionProvider());
+        groupDao = new GroupDaoImpl(new PropertyConnectionProvider(), studentDao);
 
         group101 = new Group();
         group101.setId(101);
