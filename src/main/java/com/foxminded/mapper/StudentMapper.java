@@ -26,7 +26,9 @@ public class StudentMapper implements Mapper<Student> {
             course.setId(resultSet.getInt("course_id"));
             course.setName(resultSet.getString("course_name"));
             course.setDescription(resultSet.getString("description"));
-            courseList.add(course);
+            if (resultSet.getInt("course_id")!=0){
+                courseList.add(course);
+            }
         } while (resultSet.next() && resultSet.getInt("id") == id);
         if (!resultSet.isAfterLast()){
             resultSet.previous();
@@ -37,9 +39,9 @@ public class StudentMapper implements Mapper<Student> {
 
     @Override
     public void map(PreparedStatement statement, Student model) throws SQLException {
-        statement.setString(1, model.getFirstName());
-        statement.setString(2, model.getLastName());
-        statement.setInt(3, model.getGroupId());
+        statement.setInt(1, model.getGroupId());
+        statement.setString(2, model.getFirstName());
+        statement.setString(3, model.getLastName());
         if (model.getId() != 0) {
             statement.setInt(4, model.getId());
         }
