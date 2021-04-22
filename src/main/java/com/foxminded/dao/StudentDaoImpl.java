@@ -6,7 +6,11 @@ import com.foxminded.mapper.CourseMapper;
 import com.foxminded.mapper.Mapper;
 import com.foxminded.mapper.StudentMapper;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,7 +92,19 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public void update(Student model) throws DaoException {
-
+        String sql = "UPDATE students set group_id=?, first_name=?, last_name=? WHERE id=?;";
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql)) {
+            STUDENT_MAPPER.map(statement, model);
+            if (statement.executeUpdate() == 0) {
+                System.err.println("FAIL UPDATE!!! student with id " + model.getId() + " not exist");
+                throw new DaoException("student not exist - update FAIL");
+            }
+            System.out.println("UPDATE OK... student with id " + model.getId());
+        } catch (SQLException e) {
+            System.err.println("cant update student");
+            throw new DaoException("cant update student", e);
+        }
     }
 
     @Override
@@ -98,7 +114,7 @@ public class StudentDaoImpl implements StudentDao {
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, model.getId());
             if (statement.executeUpdate() == 0) {
-                System.err.println("FAIL DELETE student " + model);
+                System.err.println("FAIL DELETE!!! student with id " + model.getId() + " not exist");
                 throw new DaoException("student not exist - delete FAIL");
             }
             System.out.println("DELETE OK... student with id " + model.getId());

@@ -1,7 +1,7 @@
 package com.foxminded.dao;
 
 import com.foxminded.domain.Student;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +71,39 @@ class StudentDaoImplTest extends AbstractDaoTest {
 
         assertTrue(actual.isPresent());
         assertEquals(expected, actual.get());
+    }
+
+    @Test
+    void update_shouldUpdateStudent_whenUpdatingStudentExist() throws DaoException {
+        Student expected = new Student();
+        expected.setId(1);
+        expected.setGroupId(101);
+        expected.setFirstName("updFirstName");
+        expected.setLastName("updLastName");
+        expected.setCourses(Arrays.asList(history, math));
+
+        Optional<Student> actual = studentDao.getById(1);
+        assertTrue(actual.isPresent());
+        studentDao.update(expected);
+        actual = studentDao.getById(1);
+
+        assertTrue(actual.isPresent());
+        assertEquals(expected, actual.get());
+    }
+
+    @Test
+    void update_shouldThrowDaoException_whenUpdatingStudentNotExist() throws DaoException {
+        Student student = new Student();
+        student.setId(199);
+        student.setGroupId(101);
+        student.setFirstName("updFirstName");
+        student.setLastName("updLastName");
+        student.setCourses(Arrays.asList(history, math));
+
+        Optional<Student> actual = studentDao.getById(199);
+        assertFalse(actual.isPresent());
+
+        assertThrows(DaoException.class, () -> studentDao.update(student));
     }
 
     @Test
