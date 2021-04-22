@@ -106,7 +106,10 @@ public class GroupDaoImpl implements GroupDao {
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             GROUP_MAPPER.map(statement, model);
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                System.err.println("FAIL UPDATE!!! group not exist " + model);
+                throw new DaoException("group not exist - UPDATE FAIL");
+            }
             System.out.println("UPDATE OK... group " + model);
         } catch (SQLException e) {
             System.err.println("cant update group");

@@ -8,7 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GroupDaoImplTest extends AbstractDaoTest{
 
@@ -80,9 +83,17 @@ class GroupDaoImplTest extends AbstractDaoTest{
         assertEquals(expected, actual.get());
     }
 
-    //todo
-    /*@Test
-    void update_shouldNotUpdateGroup_whenUpdatingGroupNotExist()*/
+    @Test
+    void update_shouldThrowDaoException_whenUpdatingGroupNotExist() throws DaoException {
+        Group group = new Group();
+        group.setId(558);
+        group.setName("up101");
+
+        Optional<Group> actual = groupDao.getById(558);
+        assertFalse(actual.isPresent());
+
+        assertThrows(DaoException.class, () -> groupDao.update(group));
+    }
 
 
     @Test
