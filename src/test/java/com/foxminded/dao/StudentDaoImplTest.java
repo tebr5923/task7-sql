@@ -9,7 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+//import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StudentDaoImplTest extends AbstractDaoTest {
 
@@ -62,7 +66,7 @@ class StudentDaoImplTest extends AbstractDaoTest {
         expected.setGroupId(101);
         expected.setFirstName("newFirstName");
         expected.setLastName("newLastName");
-        expected.setCourses(Arrays.asList(history,economics));
+        expected.setCourses(Arrays.asList(history, economics));
         studentDao.save(expected);
 
         Optional<Student> actual = studentDao.getById(expected.getId());
@@ -70,4 +74,27 @@ class StudentDaoImplTest extends AbstractDaoTest {
         assertTrue(actual.isPresent());
         assertEquals(expected, actual.get());
     }
+
+    @Test
+    void delete_shouldDeleteStudent_whenDeletingStudentIsExist() throws DaoException {
+        Optional<Student> actual = studentDao.getById(ivanov.getId());
+        assertTrue(actual.isPresent());
+
+        studentDao.delete(ivanov);
+
+        actual = studentDao.getById(ivanov.getId());
+        assertFalse(actual.isPresent());
+    }
+
+    @Test
+    void delete_shouldThrowDaoException_whenDeletingStudentNotExist() throws DaoException {
+        Student student = new Student();
+        student.setId(558);
+
+        Optional<Student> actual = studentDao.getById(student.getId());
+        assertFalse(actual.isPresent());
+
+        assertThrows(DaoException.class, () -> studentDao.delete(student));
+    }
+
 }

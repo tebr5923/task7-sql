@@ -93,6 +93,19 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public void delete(Student model) throws DaoException {
+        String sql = "DELETE FROM students WHERE id=?;";
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, model.getId());
+            if (statement.executeUpdate() == 0) {
+                System.err.println("FAIL DELETE student " + model);
+                throw new DaoException("student not exist - delete FAIL");
+            }
+            System.out.println("DELETE OK... student with id " + model.getId());
+        } catch (SQLException e) {
+            System.err.println("cant delete student");
+            throw new DaoException("cant delete student", e);
+        }
 
     }
 
