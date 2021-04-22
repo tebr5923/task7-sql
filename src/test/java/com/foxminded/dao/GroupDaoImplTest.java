@@ -1,6 +1,7 @@
 package com.foxminded.dao;
 
 import com.foxminded.domain.Group;
+import com.foxminded.domain.Student;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -79,7 +80,30 @@ class GroupDaoImplTest extends AbstractDaoTest{
         assertEquals(expected, actual.get());
     }
 
+    //todo
     /*@Test
     void update_shouldNotUpdateGroup_whenUpdatingGroupNotExist()*/
 
+
+    @Test
+    void delete_shouldDeleteGroup_whenDeletingGroupIsExist() throws DaoException {
+        Optional<Group> actual = groupDao.getById(group101.getId());
+        assertTrue(actual.isPresent());
+
+        groupDao.delete(group101);
+
+        actual = groupDao.getById(group101.getId());
+        assertFalse(actual.isPresent());
+    }
+
+    @Test
+    void delete_shouldThrowDaoException_whenDeletingGroupNotExist() throws DaoException {
+        Group group = new Group();
+        group.setId(558);
+
+        Optional<Student> actual = studentDao.getById(group.getId());
+        assertFalse(actual.isPresent());
+
+        assertThrows(DaoException.class, () -> groupDao.delete(group));
+    }
 }
