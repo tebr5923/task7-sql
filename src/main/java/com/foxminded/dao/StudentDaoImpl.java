@@ -149,9 +149,6 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     private void checkCourses(List<Course> courses) throws DaoException {
-        if (courses.isEmpty()) {
-            return;
-        }
         for (Course course : courses) {
             checkCourse(course);
         }
@@ -181,9 +178,6 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     private void registerStudentToCourses(int studentId, List<Course> courses) {
-        if (courses.isEmpty()) {
-            return;
-        }
         for (Course course : courses) {
             registerStudentToCourse(studentId, course.getId());
         }
