@@ -71,6 +71,12 @@ class GroupDaoImplTest extends AbstractDaoTest{
     }
 
     @Test
+    void save_shouldThrowDaoException_whenSavingGroupExist() {
+        assertThrows(DaoException.class, () -> groupDao.save(group101));
+    }
+
+
+    @Test
     void update_shouldUpdateGroup_whenUpdatingGroupExist() throws DaoException {
         Group expected = new Group();
         expected.setId(101);
