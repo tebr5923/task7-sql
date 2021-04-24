@@ -25,18 +25,22 @@ abstract class AbstractDaoTest {
     protected static Student petrov;
     protected static Student romanov;
     protected static StudentDao studentDao;
-    protected static GroupDaoImpl groupDao;
+    protected static GroupDao groupDao;
+    protected static CourseDao courseDao;
+
 
     @BeforeAll
     public static void createTables() {
-        dbFactory = new DBFactory(new PropertyConnectionProvider());
+        ConnectionProvider connectionProvider = new PropertyConnectionProvider();
+        dbFactory = new DBFactory(connectionProvider);
         System.out.println("try create table...");
         dbFactory.createTables();
-        connection = new PropertyConnectionProvider().getConnection();
+        connection = connectionProvider.getConnection();
         System.out.println("Connection to H2 open");
 
-        studentDao = new StudentDaoImpl(new PropertyConnectionProvider());
-        groupDao = new GroupDaoImpl(new PropertyConnectionProvider(), studentDao);
+        studentDao = new StudentDaoImpl(connectionProvider);
+        groupDao = new GroupDaoImpl(connectionProvider, studentDao);
+        courseDao = new CourseDaoImpl(connectionProvider);
 
         group101 = new Group();
         group101.setId(101);
