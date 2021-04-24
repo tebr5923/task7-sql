@@ -1,5 +1,6 @@
 package com.foxminded.dao;
 
+import com.foxminded.domain.Course;
 import com.foxminded.domain.Student;
 import org.junit.jupiter.api.Test;
 
@@ -71,6 +72,24 @@ class StudentDaoImplTest extends AbstractDaoTest {
 
         assertTrue(actual.isPresent());
         assertEquals(expected, actual.get());
+    }
+
+    @Test
+    void save_shouldThrowDaoException_whenSavingStudentRegisterOnCourseWhichNotExist() {
+        Student expected = new Student();
+        expected.setGroupId(101);
+        expected.setFirstName("newFirstName");
+        expected.setLastName("newLastName");
+        Course notExistCourse = new Course();
+        notExistCourse.setId(999);
+        expected.setCourses(Arrays.asList(notExistCourse, economics));
+
+        assertThrows(DaoException.class, () -> studentDao.save(expected));
+    }
+
+    @Test
+    void save_shouldThrowDaoException_whenSavingStudentExist() {
+        assertThrows(DaoException.class, () -> studentDao.save(ivanov));
     }
 
     @Test

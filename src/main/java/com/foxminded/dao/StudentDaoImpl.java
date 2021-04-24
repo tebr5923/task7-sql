@@ -2,7 +2,6 @@ package com.foxminded.dao;
 
 import com.foxminded.domain.Course;
 import com.foxminded.domain.Student;
-import com.foxminded.mapper.CourseMapper;
 import com.foxminded.mapper.Mapper;
 import com.foxminded.mapper.StudentMapper;
 
@@ -14,11 +13,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("squid:S106") //dont use logger in this task
 public class StudentDaoImpl implements StudentDao {
     private static final Mapper<Student> STUDENT_MAPPER = new StudentMapper();
-    private static final Mapper<Course> COURSE_MAPPER = new CourseMapper();
     private final ConnectionProvider connectionProvider;
 
     public StudentDaoImpl(ConnectionProvider connectionProvider) {
@@ -149,31 +148,23 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     private void checkCourses(List<Course> courses) throws DaoException {
-        for (Course course : courses) {
-            checkCourse(course);
-        }
-    }
-
-    private void checkCourse(Course course) throws DaoException {
-        String sql = "select c.id, c.name, c.description from courses c where c.id=?";
-        Course courseFromDB = new Course();
-        int id = course.getId();
+        String sql = "select c.id from courses c;";
+        List<Integer> listCourseIdFromDB = new ArrayList<>();
+        List<Integer> listCourseIdToSave = courses.stream().map(Course::getId).collect(Collectors.toList());
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    courseFromDB = COURSE_MAPPER.map(resultSet);
-                    System.out.println("GET BY id OK... course with id " + id);
+                while (resultSet.next()) {
+                    listCourseIdFromDB.add(resultSet.getInt("id"));
                 }
             }
         } catch (SQLException e) {
-            System.err.println("cant get course by id!!!");
-            throw new DaoException("cant get course by id!!!", e);
+            System.err.println("cant get courses");
+            throw new DaoException("cant get courses", e);
         }
-        if (!course.equals(courseFromDB)) {
-            System.err.println("dont have equal course in DB");
-            throw new DaoException("dont have equal course in DB");
+        if (!listCourseIdFromDB.containsAll(listCourseIdToSave)) {
+            System.err.println("some courses not exist!!!");
+            throw new DaoException("some courses not exist!!!");
         }
     }
 
