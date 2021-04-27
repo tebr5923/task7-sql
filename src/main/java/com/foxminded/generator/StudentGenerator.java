@@ -1,7 +1,7 @@
 package com.foxminded.generator;
 
 import com.foxminded.domain.Student;
-import com.foxminded.reader.ResourceFileReader;
+import com.foxminded.reader.Reader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,9 +14,11 @@ public class StudentGenerator implements Generator<Student> {
     private static final String FIRSTNAME_FILE_NAME = "data/firstname.data";
     private static final String LASTNAME_FILE_NAME = "data/lastname.data";
 
+    private final Reader reader;
     private final Random random;
 
-    public StudentGenerator(Random random) {
+    public StudentGenerator(Reader reader, Random random) {
+        this.reader = reader;
         this.random = random;
     }
 
@@ -27,7 +29,7 @@ public class StudentGenerator implements Generator<Student> {
 
     private List<String> getNames(String filename) {
         try {
-            return new ResourceFileReader().read(filename).collect(Collectors.toList());
+            return reader.read(filename).collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
