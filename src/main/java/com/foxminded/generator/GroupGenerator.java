@@ -8,6 +8,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GroupGenerator implements Generator<Group> {
+    private final Random random;
+
+    public GroupGenerator(Random random) {
+        this.random = random;
+    }
+
     @Override
     public List<Group> generate(int size) {
         return Stream.generate(this::generateGroup)
@@ -23,10 +29,10 @@ public class GroupGenerator implements Generator<Group> {
     }
 
     private char generateChar() {
-        return (char) ('A' + new Random().nextInt(26));
+        return (char) ('A' + random.nextInt(26));
     }
 
     private int generateDigit() {
-        return new Random().nextInt(10);
+        return random.nextInt(10);
     }
 }

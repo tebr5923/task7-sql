@@ -14,6 +14,12 @@ public class StudentGenerator implements Generator<Student> {
     private static final String FIRSTNAME_FILE_NAME = "data/firstname.data";
     private static final String LASTNAME_FILE_NAME = "data/lastname.data";
 
+    private final Random random;
+
+    public StudentGenerator(Random random) {
+        this.random = random;
+    }
+
     @Override
     public List<Student> generate(int size) throws IOException, URISyntaxException {
         return generateStudentList(getFirstnames(), getLastnames(), size);
@@ -43,6 +49,6 @@ public class StudentGenerator implements Generator<Student> {
     }
 
     private int generateDigit(int bound) {
-        return new Random().nextInt(bound);
+        return random.nextInt(bound);
     }
 }
