@@ -23,7 +23,7 @@ public class GroupGenerator implements Generator<Group> {
     }
 
     private char generateChar() {
-        return (char) ('a' + new Random().nextInt(26));
+        return (char) ('A' + new Random().nextInt(26));
     }
 
     private int generateDigit() {
