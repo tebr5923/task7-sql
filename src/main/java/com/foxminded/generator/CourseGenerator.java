@@ -12,11 +12,19 @@ public class CourseGenerator implements Generator<Course> {
     private static final String DATA_FILE_NAME = "data/courses.data";
 
     @Override
-    public List<Course> generate(int size) throws IOException, URISyntaxException {
-        return new ResourceFileReader().read(DATA_FILE_NAME)
-                .map(this::generateCourse)
-                .limit(size)
-                .collect(Collectors.toList());
+    public List<Course> generate(int size)  {
+        try {
+            return new ResourceFileReader().read(DATA_FILE_NAME)
+                    .map(this::generateCourse)
+                    .limit(size)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException(e);
+        }
     }
 
     private Course generateCourse(String name) {

@@ -21,27 +21,29 @@ public class StudentGenerator implements Generator<Student> {
     }
 
     @Override
-    public List<Student> generate(int size) throws IOException, URISyntaxException {
-        return generateStudentList(getFirstnames(), getLastnames(), size);
+    public List<Student> generate(int size) {
+        return generateStudentList(getNames(FIRSTNAME_FILE_NAME), getNames(LASTNAME_FILE_NAME), size);
     }
 
-    private List<String> getFirstnames() throws IOException, URISyntaxException {
-        return new ResourceFileReader().read(FIRSTNAME_FILE_NAME)
-                .collect(Collectors.toList());
-    }
-
-    private List<String> getLastnames() throws IOException, URISyntaxException {
-        return new ResourceFileReader().read(LASTNAME_FILE_NAME)
-                .collect(Collectors.toList());
+    private List<String> getNames(String filename) {
+        try {
+            return new ResourceFileReader().read(filename).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException(e);
+        }
     }
 
     private List<Student> generateStudentList(List<String> firstnameList, List<String> lastnameList, int bound) {
-        return Stream.generate(()->buildStudent(firstnameList.get(generateDigit(firstnameList.size())), lastnameList.get(generateDigit(lastnameList.size()))))
+        return Stream.generate(() -> buildStudent(firstnameList.get(generateDigit(firstnameList.size())), lastnameList.get(generateDigit(lastnameList.size()))))
                 .limit(bound)
                 .collect(Collectors.toList());
     }
 
-    private Student buildStudent(String firstname, String lastname){
+    private Student buildStudent(String firstname, String lastname) {
         Student student = new Student();
         student.setFirstName(firstname);
         student.setLastName(lastname);
