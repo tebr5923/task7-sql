@@ -169,19 +169,16 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     private void registerStudentToCourses(int studentId, List<Course> courses) {
-        for (Course course : courses) {
-            registerStudentToCourse(studentId, course.getId());
-        }
-    }
-
-    private void registerStudentToCourse(int studentId, int courseId) {
         String sql = "INSERT INTO students_courses (student_id, course_id) values(?,?);";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, studentId);
-            statement.setInt(2, courseId);
-            statement.executeUpdate();
-            System.out.println("students_courses SAVE");
+            for (Course course : courses) {
+                statement.setInt(1, studentId);
+                statement.setInt(2, course.getId());
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            System.out.println("All batches ok - students_courses SAVE");
         } catch (SQLException e) {
             System.err.println("students_courses NOT SAVE");
             throw new IllegalStateException("students_courses NOT SAVE", e);
