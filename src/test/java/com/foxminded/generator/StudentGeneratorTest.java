@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -23,11 +22,10 @@ import static org.mockito.Mockito.when;
 class StudentGeneratorTest {
     private static final String FIRSTNAME_FILE_NAME = "data/firstname.data";
     private static final String LASTNAME_FILE_NAME = "data/lastname.data";
+    private static final long seed = 10;
 
     @Mock
     private Reader mockReader;
-    @Mock
-    private Random mockRandom;
 
     @BeforeEach
     void setUp() throws IOException, URISyntaxException {
@@ -35,18 +33,19 @@ class StudentGeneratorTest {
         Stream<String> lastnameStream = Stream.of("Ivanov", "Petrov", "Romanov");
         when(mockReader.read(FIRSTNAME_FILE_NAME)).thenReturn(firstnameStream);
         when(mockReader.read(LASTNAME_FILE_NAME)).thenReturn(lastnameStream);
-
-        when(mockRandom.nextInt(Mockito.anyInt())).thenReturn(1);
     }
 
     @Test
     void generate_shouldReturnCourseList() {
-        Student petrov = new Student();
-        petrov.setFirstName("Petr");
-        petrov.setLastName("Petrov");
-        List<Student> expected = Arrays.asList(petrov, petrov, petrov);
+        Student petrovPetr = new Student();
+        petrovPetr.setFirstName("Petr");
+        petrovPetr.setLastName("Petrov");
+        Student ivanovIvan = new Student();
+        ivanovIvan.setFirstName("Ivan");
+        ivanovIvan.setLastName("Ivanov");
+        List<Student> expected = Arrays.asList(ivanovIvan, ivanovIvan, petrovPetr);
 
-        List<Student> actual = new StudentGenerator(mockReader, mockRandom).generate(3);
+        List<Student> actual = new StudentGenerator(mockReader, new Random(seed)).generate(3);
 
         assertEquals(expected, actual);
     }
