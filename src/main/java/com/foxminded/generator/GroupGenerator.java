@@ -10,6 +10,10 @@ import java.util.stream.Stream;
 public class GroupGenerator implements Generator<Group> {
     private final Random random;
 
+    public GroupGenerator() {
+        this(new Random());
+    }
+
     public GroupGenerator(Random random) {
         this.random = random;
     }

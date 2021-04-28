@@ -17,6 +17,10 @@ public class StudentGenerator implements Generator<Student> {
     private final Reader reader;
     private final Random random;
 
+    public StudentGenerator(Reader reader) {
+        this(reader, new Random());
+    }
+
     public StudentGenerator(Reader reader, Random random) {
         this.reader = reader;
         this.random = random;
