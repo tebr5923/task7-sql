@@ -33,8 +33,8 @@ class StudentGeneratorTest {
     void setUp() throws IOException, URISyntaxException {
         Stream<String> firstnameStream = Stream.of("Ivan", "Petr", "Roman");
         Stream<String> lastnameStream = Stream.of("Ivanov", "Petrov", "Romanov");
-        when(mockReader.read(Mockito.eq(FIRSTNAME_FILE_NAME))).thenReturn(firstnameStream);
-        when(mockReader.read(Mockito.eq(LASTNAME_FILE_NAME))).thenReturn(lastnameStream);
+        when(mockReader.read(FIRSTNAME_FILE_NAME)).thenReturn(firstnameStream);
+        when(mockReader.read(LASTNAME_FILE_NAME)).thenReturn(lastnameStream);
 
         when(mockRandom.nextInt(Mockito.anyInt())).thenReturn(1);
     }
