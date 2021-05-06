@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class CourseAssigner implements Assigner<Student, Course>{
+public class CourseAssigner implements Assigner<Student, Course> {
     private static final int DEFAULT_MIN_COURSES_AT_STUDENT = 1;
     private static final int DEFAULT_MAX_COURSES_AT_STUDENT = 3;
 
@@ -26,8 +26,7 @@ public class CourseAssigner implements Assigner<Student, Course>{
     @Override
     public List<Student> assign(List<Student> studentList, List<Course> courseList) {
         List<Student> assignedStudentList = new ArrayList<>();
-        for (Student student :
-                studentList) {
+        for (Student student : studentList) {
             student.setCourses(generateAssignedList(courseList));
             assignedStudentList.add(student);
         }
