@@ -25,12 +25,10 @@ public class CourseAssigner implements Assigner<Student, Course> {
 
     @Override
     public List<Student> assign(List<Student> studentList, List<Course> courseList) {
-        List<Student> assignedStudentList = new ArrayList<>();
         for (Student student : studentList) {
             student.setCourses(generateAssignedList(courseList));
-            assignedStudentList.add(student);
         }
-        return assignedStudentList;
+        return studentList;
     }
 
     private List<Course> generateAssignedList(List<Course> courseList) {

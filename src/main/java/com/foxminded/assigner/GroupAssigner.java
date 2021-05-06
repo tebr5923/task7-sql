@@ -26,13 +26,10 @@ public class GroupAssigner implements Assigner<Group, Student> {
     @Override
     public List<Group> assign(List<Group> groupList, List<Student> studentList) {
         List<Student> tempStudentList = new ArrayList<>(studentList);
-        List<Group> assignedGroupList = new ArrayList<>();
         for (Group group : groupList) {
             group.setStudents(generateAssignedList(tempStudentList));
-            assignedGroupList.add(group);
         }
-        //or just return groupList? maybe assignedGroupList is redundant here
-        return assignedGroupList;
+        return groupList;
     }
 
     private List<Student> generateAssignedList(List<Student> studentList) {
