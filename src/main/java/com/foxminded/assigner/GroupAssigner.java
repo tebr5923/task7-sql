@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class AssignerStudentsToGroups implements Assigner<Group, Student> {
+public class GroupAssigner implements Assigner<Group, Student> {
     private static final int DEFAULT_MIN_STUDENTS_IN_GROUP = 10;
     private static final int DEFAULT_MAX_STUDENTS_IN_GROUP = 30;
 
     private final int minStudentsInGroup;
     private final int maxStudentsInGroup;
 
-    public AssignerStudentsToGroups() {
+    public GroupAssigner() {
         this(DEFAULT_MIN_STUDENTS_IN_GROUP, DEFAULT_MAX_STUDENTS_IN_GROUP);
     }
 
-    public AssignerStudentsToGroups(int minStudentsInGroup, int maxStudentsInGroup) {
+    public GroupAssigner(int minStudentsInGroup, int maxStudentsInGroup) {
         this.minStudentsInGroup = minStudentsInGroup;
         this.maxStudentsInGroup = maxStudentsInGroup;
     }

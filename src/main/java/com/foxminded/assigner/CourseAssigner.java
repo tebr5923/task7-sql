@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class AssignerStudentsToCourses implements Assigner<Student, Course>{
+public class CourseAssigner implements Assigner<Student, Course>{
     private static final int DEFAULT_MIN_COURSES_AT_STUDENT = 1;
     private static final int DEFAULT_MAX_COURSES_AT_STUDENT = 3;
 
     private final int minCoursesAtStudent;
     private final int maxCoursesAtStudent;
 
-    public AssignerStudentsToCourses() {
+    public CourseAssigner() {
         this(DEFAULT_MIN_COURSES_AT_STUDENT, DEFAULT_MAX_COURSES_AT_STUDENT);
     }
 
-    public AssignerStudentsToCourses(int minCoursesAtStudent, int maxCoursesAtStudent) {
+    public CourseAssigner(int minCoursesAtStudent, int maxCoursesAtStudent) {
         this.minCoursesAtStudent = minCoursesAtStudent;
         this.maxCoursesAtStudent = maxCoursesAtStudent;
     }
