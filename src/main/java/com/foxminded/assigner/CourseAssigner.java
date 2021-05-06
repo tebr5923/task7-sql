@@ -25,9 +25,7 @@ public class CourseAssigner implements Assigner<Student, Course> {
 
     @Override
     public List<Student> assign(List<Student> studentList, List<Course> courseList) {
-        for (Student student : studentList) {
-            student.setCourses(generateAssignedList(courseList));
-        }
+        studentList.forEach(s -> s.setCourses(generateAssignedList(courseList)));
         return studentList;
     }
 

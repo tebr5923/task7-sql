@@ -26,9 +26,7 @@ public class GroupAssigner implements Assigner<Group, Student> {
     @Override
     public List<Group> assign(List<Group> groupList, List<Student> studentList) {
         List<Student> tempStudentList = new ArrayList<>(studentList);
-        for (Group group : groupList) {
-            group.setStudents(generateAssignedList(tempStudentList));
-        }
+        groupList.forEach(g -> g.setStudents(generateAssignedList(tempStudentList)));
         return groupList;
     }
 
