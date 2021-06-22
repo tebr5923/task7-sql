@@ -13,14 +13,24 @@ public class CourseAssigner implements Assigner<Student, Course> {
 
     private final int minCoursesAtStudent;
     private final int maxCoursesAtStudent;
+    private final Random random;
 
     public CourseAssigner() {
-        this(DEFAULT_MIN_COURSES_AT_STUDENT, DEFAULT_MAX_COURSES_AT_STUDENT);
+        this(DEFAULT_MIN_COURSES_AT_STUDENT, DEFAULT_MAX_COURSES_AT_STUDENT, new Random());
+    }
+
+    public CourseAssigner(Random random) {
+        this(DEFAULT_MIN_COURSES_AT_STUDENT, DEFAULT_MAX_COURSES_AT_STUDENT, random);
     }
 
     public CourseAssigner(int minCoursesAtStudent, int maxCoursesAtStudent) {
+        this(minCoursesAtStudent, maxCoursesAtStudent, new Random());
+    }
+
+    public CourseAssigner(int minCoursesAtStudent, int maxCoursesAtStudent, Random random) {
         this.minCoursesAtStudent = minCoursesAtStudent;
         this.maxCoursesAtStudent = maxCoursesAtStudent;
+        this.random = random;
     }
 
     @Override
@@ -33,7 +43,7 @@ public class CourseAssigner implements Assigner<Student, Course> {
         List<Course> assignedList = new ArrayList<>();
         List<Course> tempCourseList = new ArrayList<>(courseList);
         int bound = maxCoursesAtStudent - minCoursesAtStudent;
-        int size = new Random().nextInt(bound + 1) + minCoursesAtStudent;
+        int size = random.nextInt(bound + 1) + minCoursesAtStudent;
         for (int i = 0; i < size; i++) {
             int index = new Random().nextInt(tempCourseList.size() - i);
             assignedList.add(tempCourseList.remove(index));

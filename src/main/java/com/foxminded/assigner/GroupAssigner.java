@@ -13,14 +13,24 @@ public class GroupAssigner implements Assigner<Group, Student> {
 
     private final int minStudentsInGroup;
     private final int maxStudentsInGroup;
+    private final Random random;
 
     public GroupAssigner() {
-        this(DEFAULT_MIN_STUDENTS_IN_GROUP, DEFAULT_MAX_STUDENTS_IN_GROUP);
+        this(DEFAULT_MIN_STUDENTS_IN_GROUP, DEFAULT_MAX_STUDENTS_IN_GROUP, new Random());
+    }
+
+    public GroupAssigner(Random random) {
+        this(DEFAULT_MIN_STUDENTS_IN_GROUP, DEFAULT_MAX_STUDENTS_IN_GROUP, random);
     }
 
     public GroupAssigner(int minStudentsInGroup, int maxStudentsInGroup) {
+        this(minStudentsInGroup, maxStudentsInGroup, new Random());
+    }
+
+    public GroupAssigner(int minStudentsInGroup, int maxStudentsInGroup, Random random) {
         this.minStudentsInGroup = minStudentsInGroup;
         this.maxStudentsInGroup = maxStudentsInGroup;
+        this.random = random;
     }
 
     @Override
@@ -36,11 +46,11 @@ public class GroupAssigner implements Assigner<Group, Student> {
             return assignedList;
         }
         int bound = maxStudentsInGroup - minStudentsInGroup;
-        int size = new Random().nextInt(bound + 1) + minStudentsInGroup;
+        int size = random.nextInt(bound + 1) + minStudentsInGroup;
         int count = 0;
         while (count < size && !studentList.isEmpty()) {
             count++;
-            int index = new Random().nextInt(studentList.size());
+            int index = random.nextInt(studentList.size());
             assignedList.add(studentList.remove(index));
         }
         return assignedList;
