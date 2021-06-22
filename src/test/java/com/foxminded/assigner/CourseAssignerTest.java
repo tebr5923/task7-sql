@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -78,7 +79,7 @@ class CourseAssignerTest {
         assignedRomanov.setGroupId(101);
         assignedRomanov.setFirstName("Roman");
         assignedRomanov.setLastName("Romanov");
-        assignedRomanov.setCourses(Arrays.asList(math));
+        assignedRomanov.setCourses(Collections.singletonList(math));
         List<Student> expected = Arrays.asList(assignedIvanov, assignedPetrov, assignedRomanov);
 
         List<Student> actual = new CourseAssigner(new Random(seed)).assign(studentList, courseList);
