@@ -9,6 +9,7 @@ public class Group {
     private List<Student> students;
 
     public Group() {
+        //default constructor
     }
 
     public int getId() {

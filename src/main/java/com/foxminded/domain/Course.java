@@ -8,6 +8,7 @@ public class Course {
     private String description;
 
     public Course() {
+        //default constructor
     }
 
     public int getId() {
