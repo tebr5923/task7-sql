@@ -134,6 +134,34 @@ public class GroupDaoImpl implements GroupDao {
         }
     }
 
+    @Override
+    public void saveAll(List<Group> modelList) throws DaoException {
+        for (Group group : modelList) {
+            save(group);
+        }
+    }
+
+    @Override
+    public List<Group> findByStudentsCount(int studentCount) throws DaoException {
+        String sql = "select  g.id as group_id, g.name from groups g left join students s on s.group_id=g.id group by g.id having count(g.name)<=? order by group_id;";
+        List<Group> groupList = new ArrayList<>();
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, studentCount);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Group group = new DbGroup(GROUP_MAPPER.map(resultSet));
+                    groupList.add(group);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("cant find groups");
+            throw new DaoException("cant find groups", e);
+        }
+        System.out.println("find groups OK...");
+        return groupList;
+    }
+
     private class DbGroup extends Group {
         private DbGroup(Group group) {
             setId(group.getId());

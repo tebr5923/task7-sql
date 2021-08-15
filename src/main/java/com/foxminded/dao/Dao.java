@@ -13,4 +13,6 @@ public interface Dao<T, K> {
     void update(T model) throws DaoException;
 
     void delete(T model) throws DaoException;
+
+    void saveAll(List<T> modelList) throws DaoException;
 }

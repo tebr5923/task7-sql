@@ -104,6 +104,8 @@ public class StudentDaoImpl implements StudentDao {
             System.err.println("cant update student");
             throw new DaoException("cant update student", e);
         }
+        removeStudentFromAllCourses(model.getId());
+        registerStudentToCourses(model.getId(), model.getCourses());
     }
 
     @Override
@@ -121,7 +123,13 @@ public class StudentDaoImpl implements StudentDao {
             System.err.println("cant delete student");
             throw new DaoException("cant delete student", e);
         }
+    }
 
+    @Override
+    public void saveAll(List<Student> modelList) throws DaoException {
+        for (Student student : modelList) {
+            save(student);
+        }
     }
 
     @Override
@@ -144,6 +152,32 @@ public class StudentDaoImpl implements StudentDao {
             throw new DaoException("cant load students", e);
         }
         System.out.println("GET ALL students OK...");
+        return studentList;
+    }
+
+    @Override
+    public List<Student> findStudentsByCourseName(String courseName) throws DaoException {
+        List<Student> studentList = new ArrayList<>();
+        String sql = "select s.id, s.group_id, s.first_name, s.last_name, sc.course_id, c.name as course_name, c.description from students s\n" +
+                "left join students_courses as sc on sc.student_id=s.id\n" +
+                "left join courses as c on c.id=sc.course_id\n" +
+                "left join students_courses as sc1 on sc1.student_id=s.id\n" +
+                "left join courses as c1 on c1.id=sc1.course_id where c1.name like ?;";
+
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+            statement.setString(1, courseName);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Student student = STUDENT_MAPPER.map(resultSet);
+                    studentList.add(student);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("cant find students by course name");
+            throw new DaoException("cant find students by course name", e);
+        }
+        System.out.println("find students by course name OK...");
         return studentList;
     }
 
@@ -182,6 +216,22 @@ public class StudentDaoImpl implements StudentDao {
         } catch (SQLException e) {
             System.err.println("students_courses NOT SAVE");
             throw new IllegalStateException("students_courses NOT SAVE", e);
+        }
+    }
+
+    private void removeStudentFromAllCourses(int studentId) throws DaoException {
+        String sql = "delete from students_courses where student_id=?;";
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, studentId);
+            if (statement.executeUpdate() == 0) {
+                System.err.println("FAIL remove Student From All Courses");
+                throw new DaoException("FAIL remove Student From All Courses");
+            }
+            System.out.println("Remove OK...");
+        } catch (SQLException e) {
+            System.err.println("FAIL remove Student From All Courses");
+            throw new DaoException("FAIL remove Student From All Courses", e);
         }
     }
 }

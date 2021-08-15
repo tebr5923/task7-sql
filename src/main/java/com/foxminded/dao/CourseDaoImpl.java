@@ -134,4 +134,11 @@ public class CourseDaoImpl implements CourseDao {
             throw new DaoException("cant delete course", e);
         }
     }
+
+    @Override
+    public void saveAll(List<Course> modelList) throws DaoException{
+        for (Course model : modelList) {
+            save(model);
+        }
+    }
 }
