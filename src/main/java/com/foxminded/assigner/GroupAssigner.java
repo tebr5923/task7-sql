@@ -36,11 +36,16 @@ public class GroupAssigner implements Assigner<Group, Student> {
     @Override
     public List<Group> assign(List<Group> groupList, List<Student> studentList) {
         List<Student> tempStudentList = new ArrayList<>(studentList);
-        groupList.forEach(g -> g.setStudents(generateAssignedList(tempStudentList)));
+        groupList.forEach(g -> g.setStudents(generateAssignedList(g.getId(), tempStudentList)));
         return groupList;
     }
 
-    private List<Student> generateAssignedList(List<Student> studentList) {
+    private Student setGroupIdToStudent(int groupId, Student student) {
+        student.setGroupId(groupId);
+        return student;
+    }
+
+    private List<Student> generateAssignedList(int groupId, List<Student> studentList) {
         List<Student> assignedList = new ArrayList<>();
         if (studentList.size() < minStudentsInGroup) {
             return assignedList;
@@ -51,7 +56,8 @@ public class GroupAssigner implements Assigner<Group, Student> {
         while (count < size && !studentList.isEmpty()) {
             count++;
             int index = random.nextInt(studentList.size());
-            assignedList.add(studentList.remove(index));
+            //assignedList.add(studentList.remove(index));
+            assignedList.add(setGroupIdToStudent(groupId, studentList.remove(index)));
         }
         return assignedList;
     }
