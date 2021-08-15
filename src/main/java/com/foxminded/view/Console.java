@@ -57,7 +57,7 @@ public class Console {
                     deleteStudentById();
                     break;
                 case ("e"):
-                    AddStudentToTheCourse();
+                    addStudentToTheCourse();
                     break;
                 case ("f"):
                     removeStudentFromCourse();
@@ -137,7 +137,7 @@ public class Console {
     }
 
     //action e
-    private void AddStudentToTheCourse() {
+    private void addStudentToTheCourse() {
         System.out.println("Add a student to the course (from a list)");
         Student student = scanStudent().orElseThrow(() -> new IllegalArgumentException("student not found"));
         soutAllCourses();
