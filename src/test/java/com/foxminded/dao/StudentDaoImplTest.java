@@ -147,4 +147,79 @@ class StudentDaoImplTest extends AbstractDaoTest {
         assertThrows(DaoException.class, () -> studentDao.delete(student));
     }
 
+    @Test
+    void saveAll_shouldSaveAllStudents_whenSavingStudentsNotExist()throws DaoException  {
+        Student new1 = new Student();
+        new1.setGroupId(101);
+        new1.setFirstName("new1 first name");
+        new1.setLastName("new1 last name");
+        new1.setCourses(Arrays.asList(history, math));
+        Student new2 = new Student();
+        new2.setGroupId(101);
+        new2.setFirstName("new2 first name");
+        new2.setLastName("new2 last name");
+        new2.setCourses(Arrays.asList(history, math));
+        Student new3 = new Student();
+        new3.setGroupId(101);
+        new3.setFirstName("new3 first name");
+        new3.setLastName("new3 last name");
+        new3.setCourses(Arrays.asList(history, math));
+        List<Student> studentList = Arrays.asList(new1, new2, new3);
+        studentDao.saveAll(studentList);
+
+        Optional<Student> actual1 = studentDao.getById(new1.getId());
+        Optional<Student> actual2 = studentDao.getById(new2.getId());
+        Optional<Student> actual3 = studentDao.getById(new3.getId());
+
+        assertTrue(actual1.isPresent());
+        assertTrue(actual2.isPresent());
+        assertTrue(actual3.isPresent());
+        assertEquals(new1, actual1.get());
+        assertEquals(new2, actual2.get());
+        assertEquals(new3, actual3.get());
+    }
+
+    @Test
+    void saveAll_shouldThrowDaoException_whenSavingStudentExist() {
+        Student new1 = new Student();
+        new1.setGroupId(101);
+        new1.setFirstName("new1 first name");
+        new1.setLastName("new1 last name");
+        new1.setCourses(Arrays.asList(history, math));
+        Student new2 = new Student();
+        new2.setGroupId(101);
+        new2.setFirstName("new2 first name");
+        new2.setLastName("new2 last name");
+        new2.setCourses(Arrays.asList(history, math));
+        Student new3 = new Student();
+        new3.setGroupId(101);
+        new3.setFirstName("new3 first name");
+        new3.setLastName("new3 last name");
+        new3.setCourses(Arrays.asList(history, math));
+        List<Student> studentList = Arrays.asList(new1, new2, new3, ivanov);
+
+        assertThrows(DaoException.class, () -> studentDao.saveAll(studentList));
+    }
+
+    @Test
+    void findStudentsByCourseName_shouldReturnStudentList_whenCourseNotEmpty() throws DaoException{
+        List<Student> expected = Arrays.asList(ivanov, petrov);
+
+        List<Student> actual = studentDao.findStudentsByCourseName(math.getName());
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findStudentsByCourseName_shouldReturnEmptyList_whenCourseIsEmpty() throws DaoException {
+        Course testCourse = new Course();
+        testCourse.setName("test course");
+        testCourse.setDescription("this is test course");
+        courseDao.save(testCourse);
+
+        List<Student> actual = studentDao.findStudentsByCourseName(testCourse.getName());
+
+        assertTrue(actual.isEmpty());
+    }
+
 }

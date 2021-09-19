@@ -123,4 +123,47 @@ class CourseDaoImplTest extends AbstractDaoTest {
 
         assertThrows(DaoException.class, () -> courseDao.delete(course));
     }
+
+    @Test
+    void saveAll_shouldSaveAllCourses_whenSavingCoursesNotExist() throws DaoException {
+        Course new1 = new Course();
+        new1.setName("new1");
+        new1.setDescription("this is new1");
+        Course new2 = new Course();
+        new2.setName("new2");
+        new2.setDescription("this is new2");
+        Course new3 = new Course();
+        new3.setName("new3");
+        new3.setDescription("this is new3");
+        List<Course> courseList = Arrays.asList(new1, new2, new3);
+        courseDao.saveAll(courseList);
+
+        Optional<Course> actual1 = courseDao.getByName("new1");
+        Optional<Course> actual2 = courseDao.getByName("new2");
+        Optional<Course> actual3 = courseDao.getByName("new3");
+
+        assertTrue(actual1.isPresent());
+        assertTrue(actual2.isPresent());
+        assertTrue(actual3.isPresent());
+        assertEquals(new1, actual1.get());
+        assertEquals(new2, actual2.get());
+        assertEquals(new3, actual3.get());
+    }
+
+    @Test
+    void saveAll_shouldThrowDaoException_whenSavingCourseExist() {
+        Course new1 = new Course();
+        new1.setName("new1");
+        new1.setDescription("this is new1");
+        Course new2 = new Course();
+        new2.setName("new2");
+        new2.setDescription("this is new2");
+        Course new3 = new Course();
+        new3.setName("new3");
+        new3.setDescription("this is new3");
+        List<Course> courseList = Arrays.asList(new1, new2, new3, math);
+
+        assertThrows(DaoException.class, () -> courseDao.saveAll(courseList));
+    }
+
 }
