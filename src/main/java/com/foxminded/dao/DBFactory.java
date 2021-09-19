@@ -61,10 +61,7 @@ public class DBFactory {
 
     private void executeScript(String fileName, String message){
         Optional<String> script = getScript(fileName);
-        if (script.isPresent()) {
-            executeQuery(script.get(), message);
-        } else {
-            System.err.printf("tables NOT %s - EMPTY SCRIPT%n", message);
-        }
+        executeQuery(script.orElseThrow(() -> new RuntimeException(
+                String.format("tables NOT %s - EMPTY SCRIPT%n", message))), message);
     }
 }
