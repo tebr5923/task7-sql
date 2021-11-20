@@ -1,5 +1,6 @@
 package com.foxminded.view;
 
+import com.foxminded.console_reader.ConsoleReader;
 import com.foxminded.dao.*;
 import com.foxminded.domain.Course;
 import com.foxminded.domain.Group;
@@ -8,17 +9,26 @@ import com.foxminded.domain.Student;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 @SuppressWarnings("squid:S106")//Console application
 public class Console {
-    private static final Scanner SCANNER = new Scanner(System.in);
+    private static final ConsoleReader CONSOLE_READER = new ConsoleReader();
     private static final StudentDao STUDENT_DAO =
             new StudentDaoImpl(new PropertyConnectionProvider());
     private static final GroupDao GROUP_DAO =
             new GroupDaoImpl(new PropertyConnectionProvider(), new StudentDaoImpl(new PropertyConnectionProvider()));
     private static final CourseDao COURSE_DAO =
             new CourseDaoImpl(new PropertyConnectionProvider());
+
+    private final ConsoleReader consoleReader;
+
+    public Console() {
+        this(CONSOLE_READER);
+    }
+
+    public Console(ConsoleReader consoleReader) {
+        this.consoleReader = consoleReader;
+    }
 
     public void showMainMenu() {
         String mainString = "Chose an action and press the button and press ENTER";
@@ -41,7 +51,7 @@ public class Console {
     }
 
     public void readFromConsole() {
-        String s = SCANNER.nextLine();
+        String s = consoleReader.readString();
         while (!s.equals("q")) {
             switch (s) {
                 case ("a"):
@@ -67,17 +77,16 @@ public class Console {
                     break;
             }
             showMainMenu();
-            s = SCANNER.nextLine();
+            s = consoleReader.readString();
         }
-        SCANNER.close();
+        consoleReader.close();
     }
 
     //action a
     private void findAllGroupsWithLessOrEqualsStudentsCount() {
         System.out.println("Find all groups with less or equals students count");
         System.out.println("enter count of student in group:");
-        int i = SCANNER.nextInt();
-        SCANNER.nextLine(); //?
+        int i = consoleReader.readInt();
         try {
             List<Group> groupList = GROUP_DAO.findByStudentsCount(i);
             groupList.forEach(System.out::println);
@@ -93,7 +102,7 @@ public class Console {
     private void findAllStudentsRelatedToCourse() {
         System.out.println("Find all students related to course with given name");
         System.out.println("enter course name:");
-        String s = SCANNER.nextLine();
+        String s = consoleReader.readString();
         try {
             List<Student> studentList = STUDENT_DAO.findStudentsByCourseName(s);
             studentList.forEach(System.out::println);
@@ -113,7 +122,6 @@ public class Console {
         student.setGroupId(scanGroupId());
         soutAllCourses();
         Optional<Course> optionalCourse = scanCourse();
-        SCANNER.nextLine(); //?
         student.setCourses(Collections.singletonList(optionalCourse.orElseThrow(() -> new IllegalArgumentException("course not found"))));
         saveStudent(student);
     }
@@ -122,8 +130,7 @@ public class Console {
     private void deleteStudentById() {
         System.out.println("delete student by id");
         System.out.println("enter student id:");
-        int studentId = SCANNER.nextInt();
-        SCANNER.nextLine(); //?
+        int studentId = consoleReader.readInt();
         try {
             Student student = STUDENT_DAO.getById(studentId).orElseThrow(() -> new IllegalArgumentException("student not found"));
             STUDENT_DAO.delete(student);
@@ -142,7 +149,6 @@ public class Console {
         Student student = scanStudent().orElseThrow(() -> new IllegalArgumentException("student not found"));
         soutAllCourses();
         Course course = scanCourse().orElseThrow(() -> new IllegalArgumentException("course not found"));
-        SCANNER.nextLine(); //?
         List<Course> courseList = student.getCourses();
         if (!courseList.contains(course)) {
             courseList.add(course);
@@ -169,7 +175,6 @@ public class Console {
         List<Course> courseList = student.getCourses();
         courseList.forEach(System.out::println);
         Course course = scanCourse().orElseThrow(() -> new IllegalArgumentException("course not found"));
-        SCANNER.nextLine(); //?
         if (courseList.contains(course)) {
             courseList.remove(course);
             student.setCourses(courseList);
@@ -196,7 +201,7 @@ public class Console {
         System.out.println("enter student id:");
         Optional<Student> optionalStudent = Optional.empty();
         try {
-            optionalStudent = STUDENT_DAO.getById(SCANNER.nextInt());
+            optionalStudent = STUDENT_DAO.getById(consoleReader.readInt());
         } catch (DaoException e) {
             e.printStackTrace();
             //todo: i don't sure about RuntimeDaoException in this place
@@ -207,12 +212,12 @@ public class Console {
 
     private String scanFirstName() {
         System.out.println("enter first name:");
-        return SCANNER.nextLine();
+        return consoleReader.readString();
     }
 
     private String scanLastName() {
         System.out.println("enter last name:");
-        return SCANNER.nextLine();
+        return consoleReader.readString();
     }
 
     private int scanGroupId() {
@@ -224,10 +229,10 @@ public class Console {
             throw new RuntimeDaoException("don't load groups", e);
         }
         System.out.println("enter group id from list:");
-        return SCANNER.nextInt();
+        return consoleReader.readInt();
     }
 
-    private void soutAllCourses(){
+    private void soutAllCourses() {
         try {
             COURSE_DAO.getAll().forEach(System.out::println);
         } catch (DaoException e) {
@@ -241,7 +246,7 @@ public class Console {
         Optional<Course> optionalCourse = Optional.empty();
         System.out.println("enter course id from list:");
         try {
-            optionalCourse = COURSE_DAO.getById(SCANNER.nextInt());
+            optionalCourse = COURSE_DAO.getById(consoleReader.readInt());
         } catch (DaoException e) {
             e.printStackTrace();
             //todo: i don't sure about RuntimeDaoException in this place
