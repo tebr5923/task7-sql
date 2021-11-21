@@ -92,8 +92,6 @@ public class Console {
             groupList.forEach(System.out::println);
         } catch (DaoException e) {
             e.printStackTrace();
-            //todo: i don't sure about RuntimeDaoException in this place
-            // maybe some else RuntimeException?
             throw new RuntimeDaoException("find groups ERROR", e);
         }
     }
@@ -108,7 +106,6 @@ public class Console {
             studentList.forEach(System.out::println);
         } catch (DaoException e) {
             e.printStackTrace();
-            //todo: i don't sure about RuntimeDaoException in this place
             throw new RuntimeDaoException("find students ERROR", e);
         }
     }
@@ -138,7 +135,6 @@ public class Console {
             System.out.println(student);
         } catch (DaoException e) {
             e.printStackTrace();
-            //todo: i don't sure about RuntimeDaoException in this place
             throw new RuntimeDaoException("student delete ERROR", e);
         }
     }
@@ -159,7 +155,6 @@ public class Console {
                 System.out.println("successfully add to the course " + course.getName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                //todo: i don't sure about RuntimeDaoException in this place
                 throw new RuntimeDaoException("don't update student", e);
             }
         } else {
@@ -184,7 +179,6 @@ public class Console {
                 System.out.println("successfully remove from course " + course.getName());
             } catch (DaoException e) {
                 e.printStackTrace();
-                //todo: i don't sure about RuntimeDaoException in this place
                 throw new RuntimeDaoException("don't update student", e);
             }
         } else {
@@ -204,7 +198,6 @@ public class Console {
             optionalStudent = STUDENT_DAO.getById(consoleReader.readInt());
         } catch (DaoException e) {
             e.printStackTrace();
-            //todo: i don't sure about RuntimeDaoException in this place
             throw new RuntimeDaoException("don't load student", e);
         }
         return optionalStudent;
@@ -225,7 +218,6 @@ public class Console {
             GROUP_DAO.getAll().forEach(System.out::println);
         } catch (DaoException e) {
             e.printStackTrace();
-            //todo: i don't sure about RuntimeDaoException in this place
             throw new RuntimeDaoException("don't load groups", e);
         }
         System.out.println("enter group id from list:");
@@ -237,7 +229,6 @@ public class Console {
             COURSE_DAO.getAll().forEach(System.out::println);
         } catch (DaoException e) {
             e.printStackTrace();
-            //todo: i don't sure about RuntimeDaoException in this place
             throw new RuntimeDaoException("don't load courses", e);
         }
     }
@@ -249,7 +240,6 @@ public class Console {
             optionalCourse = COURSE_DAO.getById(consoleReader.readInt());
         } catch (DaoException e) {
             e.printStackTrace();
-            //todo: i don't sure about RuntimeDaoException in this place
             throw new RuntimeDaoException("don't load course", e);
         }
         return optionalCourse;
@@ -262,7 +252,6 @@ public class Console {
             System.out.println(student);
         } catch (DaoException e) {
             e.printStackTrace();
-            //todo: i don't sure about RuntimeDaoException in this place
             throw new RuntimeDaoException("don't save student", e);
         }
     }
