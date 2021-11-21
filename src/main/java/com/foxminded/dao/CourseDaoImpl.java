@@ -24,7 +24,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public Optional<Course> getByName(String name) throws DaoException {
-        String sql = "select c.id, c.name, c.description from courses c where c.name=?;";
+        String sql = "select id, name, description from courses where name=?;";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
@@ -45,7 +45,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public Optional<Course> getById(Integer id) throws DaoException {
-        String sql = "select c.id, c.name, c.description from courses c where c.id=?;";
+        String sql = "select id, name, description from courses where id=?;";
         try (final Connection connection = connectionProvider.getConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -67,7 +67,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> getAll() throws DaoException {
         List<Course> courseList = new ArrayList<>();
-        String sql = "select c.id, c.name, c.description from courses c;";
+        String sql = "select id, name, description from courses;";
         try (final Connection connection = connectionProvider.getConnection();
              final ResultSet resultSet = connection.createStatement().executeQuery(sql)) {
             while (resultSet.next()) {
