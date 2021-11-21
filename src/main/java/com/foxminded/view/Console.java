@@ -192,14 +192,12 @@ public class Console {
 
     private Optional<Student> scanStudent() {
         System.out.println("enter student id:");
-        Optional<Student> optionalStudent = Optional.empty();
         try {
-            optionalStudent = STUDENT_DAO.getById(consoleReader.readInt());
+            return STUDENT_DAO.getById(consoleReader.readInt());
         } catch (DaoException e) {
             e.printStackTrace();
             throw new RuntimeDaoException("don't load student", e);
         }
-        return optionalStudent;
     }
 
     private String scanFirstName() {
@@ -233,15 +231,13 @@ public class Console {
     }
 
     private Optional<Course> scanCourse() {
-        Optional<Course> optionalCourse = Optional.empty();
         System.out.println("enter course id from list:");
         try {
-            optionalCourse = COURSE_DAO.getById(consoleReader.readInt());
+            return COURSE_DAO.getById(consoleReader.readInt());
         } catch (DaoException e) {
             e.printStackTrace();
             throw new RuntimeDaoException("don't load course", e);
         }
-        return optionalCourse;
     }
 
     private void saveStudent(Student student) {
