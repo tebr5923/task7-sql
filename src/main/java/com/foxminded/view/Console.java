@@ -13,12 +13,14 @@ import java.util.Optional;
 @SuppressWarnings("squid:S106")//Console application
 public class Console {
     private static final ConsoleReader CONSOLE_READER = new ConsoleReader();
+    private static final ConnectionProvider CONNECTION_PROVIDER =
+            new PropertyConnectionProvider();
     private static final StudentDao STUDENT_DAO =
-            new StudentDaoImpl(new PropertyConnectionProvider());
+            new StudentDaoImpl(CONNECTION_PROVIDER);
     private static final GroupDao GROUP_DAO =
-            new GroupDaoImpl(new PropertyConnectionProvider(), new StudentDaoImpl(new PropertyConnectionProvider()));
+            new GroupDaoImpl(CONNECTION_PROVIDER, STUDENT_DAO);
     private static final CourseDao COURSE_DAO =
-            new CourseDaoImpl(new PropertyConnectionProvider());
+            new CourseDaoImpl(CONNECTION_PROVIDER);
 
     private final ConsoleReader consoleReader;
 
