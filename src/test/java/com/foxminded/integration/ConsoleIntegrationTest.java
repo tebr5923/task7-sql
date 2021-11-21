@@ -27,7 +27,6 @@ import java.util.Random;
 import java.util.StringJoiner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,12 +38,8 @@ class ConsoleIntegrationTest {
     private static final int COUNT_OF_STUDENTS = 200;
     private static final ByteArrayOutputStream OUTPUT = new ByteArrayOutputStream();
 
-
     private static Connection connection;
     private static DBFactory dbFactory;
-    private static StudentDao studentDao;
-    private static GroupDao groupDao;
-    private static CourseDao courseDao;
 
     @Mock
     private ConsoleReader mockConsoleReader;
@@ -58,10 +53,9 @@ class ConsoleIntegrationTest {
         connection = connectionProvider.getConnection();
         System.out.println("Connection to H2 open");
 
-        studentDao = new StudentDaoImpl(connectionProvider);
-        groupDao = new GroupDaoImpl(connectionProvider, studentDao);
-        courseDao = new CourseDaoImpl(connectionProvider);
-
+        StudentDao studentDao = new StudentDaoImpl(connectionProvider);
+        GroupDao groupDao = new GroupDaoImpl(connectionProvider, studentDao);
+        CourseDao courseDao = new CourseDaoImpl(connectionProvider);
 
         //GroupGenerator and save
         List<Group> groupList = new GroupGenerator(RANDOM).generate(COUNT_OF_GROUPS);
@@ -75,14 +69,14 @@ class ConsoleIntegrationTest {
         List<Student> studentList = new StudentGenerator(new ResourceFileReader(), RANDOM).generate(COUNT_OF_STUDENTS);
 
         GroupAssigner groupAssigner = new GroupAssigner(RANDOM);
-        List<Group> assignedGroupList = groupAssigner.assign(groupList, studentList);
+        //List<Group> assignedGroupList = groupAssigner.assign(groupList, studentList);
+        groupAssigner.assign(groupList, studentList);
 
         Assigner<Student, Course> courseAssigner = new CourseAssigner(RANDOM);
         List<Student> assignedStudentList = courseAssigner.assign(studentList, courseList);
         studentDao.saveAll(assignedStudentList);
 
         System.setOut(new PrintStream(OUTPUT));
-
     }
 
     @AfterAll
@@ -90,10 +84,7 @@ class ConsoleIntegrationTest {
         dbFactory.dropTables();
         connection.close();
         System.out.println("Connection to H2 close");
-
         System.setOut(null);
-
-
     }
 
     @BeforeEach
@@ -101,12 +92,6 @@ class ConsoleIntegrationTest {
         when(mockConsoleReader.readString()).thenReturn("a", "b", "English", "c", "NewFirstName", "NewLastName", "d", "e", "f", "q");
         when(mockConsoleReader.readInt()).thenReturn(15, 101, 1, 201, 155, 1, 155, 1);
     }
-
-/*
-    @AfterEach
-    void tearDown() {
-    }
-*/
 
     @Test
     void main() {
@@ -116,9 +101,6 @@ class ConsoleIntegrationTest {
         console.readFromConsole();
 
         assertEquals(expected, OUTPUT.toString());
-
-        //assertTrue(true);
-
     }
 
     private String buildExpected() {
@@ -308,7 +290,7 @@ class ConsoleIntegrationTest {
                 .add("e. Add a student to the course (from a list)")
                 .add("f. Remove the student from one of his or her courses")
                 .add("q. exit");
-
         return expected.toString();
     }
+
 }

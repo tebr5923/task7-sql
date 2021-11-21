@@ -56,7 +56,6 @@ public class GroupAssigner implements Assigner<Group, Student> {
         while (count < size && !studentList.isEmpty()) {
             count++;
             int index = random.nextInt(studentList.size());
-            //assignedList.add(studentList.remove(index));
             assignedList.add(setGroupIdToStudent(groupId, studentList.remove(index)));
         }
         return assignedList;

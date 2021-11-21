@@ -42,7 +42,7 @@ public class Main {
         List<Student> studentList = new StudentGenerator(new ResourceFileReader(), random).generate(200);
 
         GroupAssigner groupAssigner = new GroupAssigner(random);
-        List<Group> assignedGroupList = groupAssigner.assign(groupList, studentList);
+        groupAssigner.assign(groupList, studentList);
 
         Assigner<Student, Course> courseAssigner = new CourseAssigner(random);
         List<Student> assignedStudentList = courseAssigner.assign(studentList, courseList);
