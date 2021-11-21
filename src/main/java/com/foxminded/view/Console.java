@@ -172,7 +172,7 @@ public class Console {
         Course course = scanCourse().orElseThrow(() -> new IllegalArgumentException("course not found"));
         if (courseList.contains(course)) {
             courseList.remove(course);
-            student.setCourses(courseList);
+            //student.setCourses(courseList); No need as courseList is already a reference to the same object
             try {
                 STUDENT_DAO.update(student);
                 System.out.println(student);
