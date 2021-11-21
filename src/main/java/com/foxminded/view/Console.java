@@ -170,8 +170,7 @@ public class Console {
         List<Course> courseList = student.getCourses();
         courseList.forEach(System.out::println);
         Course course = scanCourse().orElseThrow(() -> new IllegalArgumentException("course not found"));
-        if (courseList.contains(course)) {
-            courseList.remove(course);
+        if (courseList.remove(course)) {
             //student.setCourses(courseList); No need as courseList is already a reference to the same object
             try {
                 STUDENT_DAO.update(student);
