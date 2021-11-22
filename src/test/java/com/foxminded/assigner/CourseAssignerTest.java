@@ -73,7 +73,7 @@ class CourseAssignerTest {
         assignedPetrov.setGroupId(101);
         assignedPetrov.setFirstName("Petr");
         assignedPetrov.setLastName("Petrov");
-        assignedPetrov.setCourses(Arrays.asList(history, math));
+        assignedPetrov.setCourses(Arrays.asList(history, philosophy));
         Student assignedRomanov = new Student();
         assignedRomanov.setId(3);
         assignedRomanov.setGroupId(101);

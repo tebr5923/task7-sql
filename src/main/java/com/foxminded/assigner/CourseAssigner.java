@@ -45,7 +45,7 @@ public class CourseAssigner implements Assigner<Student, Course> {
         int bound = maxCoursesAtStudent - minCoursesAtStudent;
         int size = random.nextInt(bound + 1) + minCoursesAtStudent;
         for (int i = 0; i < size; i++) {
-            int index = random.nextInt(tempCourseList.size() - i);
+            int index = random.nextInt(tempCourseList.size());
             assignedList.add(tempCourseList.remove(index));
         }
         return assignedList;
