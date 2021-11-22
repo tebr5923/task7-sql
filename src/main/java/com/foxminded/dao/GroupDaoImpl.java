@@ -16,6 +16,8 @@ public class GroupDaoImpl implements GroupDao {
     private final ConnectionProvider connectionProvider;
     private final StudentDao studentDao;
 
+    private List<Student> students;
+
     public GroupDaoImpl(ConnectionProvider connectionProvider, StudentDao studentDao) {
         this.connectionProvider = connectionProvider;
         this.studentDao = studentDao;
@@ -170,15 +172,15 @@ public class GroupDaoImpl implements GroupDao {
 
         @Override
         public List<Student> getStudents() {
-            List<Student> students;
-            try {
-                students = studentDao.getStudentsByGroup(getId());
-            } catch (DaoException e) {
-                System.err.println("cant load students");
-                throw new RuntimeDaoException("cant load students", e);
+            if (students == null) {
+                try {
+                    students = studentDao.getStudentsByGroup(getId());
+                } catch (DaoException e) {
+                    System.err.println("cant load students");
+                    throw new RuntimeDaoException("cant load students", e);
+                }
             }
             return students;
         }
-
     }
 }
