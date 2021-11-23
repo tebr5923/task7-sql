@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -89,11 +90,9 @@ class GroupAssignerTest {
     }
 
     private void assertStudentList(List<Group> expected, List<Group> actual) {
-        int i = 0;
-        for (Group group : actual) {
-            if (group.getStudents() != null) {
-                assertEquals(group.getStudents(), expected.get(i++).getStudents());
-            }
+        ListIterator<Group> groupIterator = actual.listIterator();
+        while (groupIterator.hasNext()) {
+            assertEquals(expected.get(groupIterator.nextIndex()).getStudents(), groupIterator.next().getStudents());
         }
     }
 }
