@@ -2,7 +2,6 @@ package com.foxminded.assigner;
 
 import com.foxminded.domain.Group;
 import com.foxminded.domain.Student;
-import com.foxminded.util.StudentBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,17 +33,16 @@ class GroupAssignerTest {
 
     @BeforeEach
     void setUp() {
-        StudentBuilder studentBuilder = new StudentBuilder();
-        ivanov = studentBuilder.build("Ivan", "Ivanov");
-        petrov = studentBuilder.build("Petr", "Petrov");
-        romanov = studentBuilder.build("Roman", "Romanov");
-        denisov = studentBuilder.build("Denis", "Denisov");
-        alexandrov = studentBuilder.build("Alexandr", "Alexandrov");
-        alexeev = studentBuilder.build("Alexey", "Alexaeev");
-        pahomov = studentBuilder.build("Pahom", "Pahomov");
-        mihailov = studentBuilder.build("Mihail", "Mihailov");
-        egorov = studentBuilder.build("Egor", "Egorov");
-        igorev = studentBuilder.build("Igor", "Igorev");
+        ivanov = createStudent("Ivan", "Ivanov");
+        petrov = createStudent("Petr", "Petrov");
+        romanov = createStudent("Roman", "Romanov");
+        denisov = createStudent("Denis", "Denisov");
+        alexandrov = createStudent("Alexandr", "Alexandrov");
+        alexeev = createStudent("Alexey", "Alexaeev");
+        pahomov = createStudent("Pahom", "Pahomov");
+        mihailov = createStudent("Mihail", "Mihailov");
+        egorov = createStudent("Egor", "Egorov");
+        igorev = createStudent("Igor", "Igorev");
         studentList = Arrays.asList(ivanov, petrov, romanov,
                 denisov, alexandrov, alexeev, pahomov, mihailov, egorov, igorev);
 
@@ -94,5 +92,12 @@ class GroupAssignerTest {
         while (groupIterator.hasNext()) {
             assertEquals(expected.get(groupIterator.nextIndex()).getStudents(), groupIterator.next().getStudents());
         }
+    }
+
+    private Student createStudent(String firstName, String lastName) {
+        Student student = new Student();
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        return student;
     }
 }
