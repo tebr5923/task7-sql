@@ -1,6 +1,6 @@
 package com.foxminded.view;
 
-import com.foxminded.console_reader.ConsoleReader;
+import com.foxminded.my_reader.ConsoleReader;
 import com.foxminded.view.action.Action;
 import com.foxminded.view.action.ConsoleAction;
 

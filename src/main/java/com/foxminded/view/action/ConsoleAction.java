@@ -1,6 +1,6 @@
 package com.foxminded.view.action;
 
-import com.foxminded.console_reader.ConsoleReader;
+import com.foxminded.my_reader.ConsoleReader;
 import com.foxminded.dao.ConnectionProvider;
 import com.foxminded.dao.CourseDao;
 import com.foxminded.dao.CourseDaoImpl;

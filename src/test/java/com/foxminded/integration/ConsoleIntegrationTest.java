@@ -3,7 +3,7 @@ package com.foxminded.integration;
 import com.foxminded.assigner.Assigner;
 import com.foxminded.assigner.CourseAssigner;
 import com.foxminded.assigner.GroupAssigner;
-import com.foxminded.console_reader.ConsoleReader;
+import com.foxminded.my_reader.ConsoleReader;
 import com.foxminded.dao.*;
 import com.foxminded.domain.Course;
 import com.foxminded.domain.Group;
