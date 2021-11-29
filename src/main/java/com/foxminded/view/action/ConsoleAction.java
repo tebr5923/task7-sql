@@ -1,6 +1,5 @@
 package com.foxminded.view.action;
 
-import com.foxminded.view.reader.ConsoleReader;
 import com.foxminded.dao.ConnectionProvider;
 import com.foxminded.dao.CourseDao;
 import com.foxminded.dao.CourseDaoImpl;
@@ -72,7 +71,7 @@ public class ConsoleAction implements Action {
         student.setFirstName(scanFirstName());
         student.setLastName(scanLastName());
         student.setGroupId(scanGroupId());
-        soutAllCourses();
+        printAllCourses();
         Optional<Course> optionalCourse = scanCourse();
         student.setCourses(Collections.singletonList(optionalCourse.orElseThrow(() -> new IllegalArgumentException("course not found"))));
         saveStudent(student);
@@ -98,7 +97,7 @@ public class ConsoleAction implements Action {
     public void addStudentToTheCourse() {
         System.out.println("Add a student to the course (from a list)");
         Student student = scanStudent().orElseThrow(() -> new IllegalArgumentException("student not found"));
-        soutAllCourses();
+        printAllCourses();
         Course course = scanCourse().orElseThrow(() -> new IllegalArgumentException("course not found"));
         List<Course> courseList = student.getCourses();
         if (!courseList.contains(course)) {
@@ -175,7 +174,7 @@ public class ConsoleAction implements Action {
         return consoleReader.readInt();
     }
 
-    private void soutAllCourses() {
+    private void printAllCourses() {
         try {
             COURSE_DAO.getAll().forEach(System.out::println);
         } catch (DaoException e) {
