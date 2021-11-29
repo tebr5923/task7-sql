@@ -1,21 +1,22 @@
 package com.foxminded.view;
 
-import com.foxminded.my_reader.ConsoleReader;
+import com.foxminded.view.reader.ConsoleReader;
 import com.foxminded.view.action.Action;
 import com.foxminded.view.action.ConsoleAction;
+import com.foxminded.view.reader.Reader;
 
 @SuppressWarnings("squid:S106")//Console application
 public class Console {
-    private static final ConsoleReader CONSOLE_READER = new ConsoleReader();
+    private static final Reader CONSOLE_READER = new ConsoleReader();
 
-    private final ConsoleReader consoleReader;
+    private final Reader consoleReader;
     private final Action action;
 
     public Console() {
         this(CONSOLE_READER);
     }
 
-    public Console(ConsoleReader consoleReader) {
+    public Console(Reader consoleReader) {
         this.consoleReader = consoleReader;
         this.action = new ConsoleAction(consoleReader);
     }

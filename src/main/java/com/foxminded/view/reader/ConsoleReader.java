@@ -1,8 +1,8 @@
-package com.foxminded.my_reader;
+package com.foxminded.view.reader;
 
 import java.util.Scanner;
 
-public class ConsoleReader implements MyReader{
+public class ConsoleReader implements Reader{
 
     private final Scanner scanner;
 

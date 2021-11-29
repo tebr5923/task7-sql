@@ -1,6 +1,6 @@
 package com.foxminded.view.action;
 
-import com.foxminded.my_reader.ConsoleReader;
+import com.foxminded.view.reader.ConsoleReader;
 import com.foxminded.dao.ConnectionProvider;
 import com.foxminded.dao.CourseDao;
 import com.foxminded.dao.CourseDaoImpl;
@@ -14,6 +14,7 @@ import com.foxminded.dao.StudentDaoImpl;
 import com.foxminded.domain.Course;
 import com.foxminded.domain.Group;
 import com.foxminded.domain.Student;
+import com.foxminded.view.reader.Reader;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,9 +31,9 @@ public class ConsoleAction implements Action {
     private static final CourseDao COURSE_DAO =
             new CourseDaoImpl(CONNECTION_PROVIDER);
 
-    private final ConsoleReader consoleReader;
+    private final Reader consoleReader;
 
-    public ConsoleAction(ConsoleReader consoleReader) {
+    public ConsoleAction(Reader consoleReader) {
         this.consoleReader = consoleReader;
     }
 
