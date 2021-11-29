@@ -12,7 +12,7 @@ import com.foxminded.generator.CourseGenerator;
 import com.foxminded.generator.GroupGenerator;
 import com.foxminded.generator.StudentGenerator;
 import com.foxminded.reader.ResourceFileReader;
-import com.foxminded.view.Console;
+import com.foxminded.view.ConsoleMenu;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Disabled("Explicitly Disabled")
-class ConsoleIntegrationTest {
+class ConsoleMenuIntegrationTest {
     private static final Random RANDOM = new Random(10);
     private static final int COUNT_OF_GROUPS = 10;
     private static final int COUNT_OF_COURSES = 10;
@@ -97,8 +97,8 @@ class ConsoleIntegrationTest {
     void main() {
         String expected = buildExpected();
 
-        Console console = new Console(mockConsoleReader);
-        console.readFromConsole();
+        ConsoleMenu consoleMenu = new ConsoleMenu(mockConsoleReader);
+        consoleMenu.readFromConsole();
 
         assertEquals(expected, OUTPUT.toString());
     }

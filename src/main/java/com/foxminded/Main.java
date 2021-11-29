@@ -11,7 +11,7 @@ import com.foxminded.generator.CourseGenerator;
 import com.foxminded.generator.GroupGenerator;
 import com.foxminded.generator.StudentGenerator;
 import com.foxminded.reader.ResourceFileReader;
-import com.foxminded.view.Console;
+import com.foxminded.view.ConsoleMenu;
 
 import java.util.List;
 import java.util.Random;
@@ -48,9 +48,9 @@ public class Main {
         List<Student> assignedStudentList = courseAssigner.assign(studentList, courseList);
         studentDao.saveAll(assignedStudentList);
 
-        Console console = new Console();
-        console.showMainMenu();
-        console.readFromConsole();
+        ConsoleMenu consoleMenu = new ConsoleMenu();
+        consoleMenu.showMainMenu();
+        consoleMenu.readFromConsole();
 
         //dbFactory.dropTables();
     }

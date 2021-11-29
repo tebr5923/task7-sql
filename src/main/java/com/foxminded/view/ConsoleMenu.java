@@ -6,17 +6,17 @@ import com.foxminded.view.action.ConsoleAction;
 import com.foxminded.view.reader.Reader;
 
 @SuppressWarnings("squid:S106")//Console application
-public class Console {
+public class ConsoleMenu {
     private static final Reader CONSOLE_READER = new ConsoleReader();
 
     private final Reader consoleReader;
     private final Action action;
 
-    public Console() {
+    public ConsoleMenu() {
         this(CONSOLE_READER);
     }
 
-    public Console(Reader consoleReader) {
+    public ConsoleMenu(Reader consoleReader) {
         this.consoleReader = consoleReader;
         this.action = new ConsoleAction(consoleReader);
     }
