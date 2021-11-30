@@ -6,7 +6,6 @@ import com.foxminded.dao.CourseDaoImpl;
 import com.foxminded.dao.DaoException;
 import com.foxminded.dao.GroupDao;
 import com.foxminded.dao.GroupDaoImpl;
-import com.foxminded.dao.PropertyConnectionProvider;
 import com.foxminded.dao.RuntimeDaoException;
 import com.foxminded.dao.StudentDao;
 import com.foxminded.dao.StudentDaoImpl;
@@ -21,19 +20,16 @@ import java.util.Optional;
 
 @SuppressWarnings("squid:S106")//Console action
 public class ConsoleAction implements Action {
-    private static final ConnectionProvider CONNECTION_PROVIDER =
-            new PropertyConnectionProvider();
-    private static final StudentDao STUDENT_DAO =
-            new StudentDaoImpl(CONNECTION_PROVIDER);
-    private static final GroupDao GROUP_DAO =
-            new GroupDaoImpl(CONNECTION_PROVIDER, STUDENT_DAO);
-    private static final CourseDao COURSE_DAO =
-            new CourseDaoImpl(CONNECTION_PROVIDER);
-
     private final Reader consoleReader;
+    private final StudentDao studentDao;
+    private final GroupDao groupDao;
+    private final CourseDao courseDao;
 
-    public ConsoleAction(Reader consoleReader) {
+    public ConsoleAction(Reader consoleReader, ConnectionProvider connectionProvider) {
         this.consoleReader = consoleReader;
+        studentDao = new StudentDaoImpl(connectionProvider);
+        groupDao = new GroupDaoImpl(connectionProvider, studentDao);
+        courseDao = new CourseDaoImpl(connectionProvider);
     }
 
     @Override
@@ -42,7 +38,7 @@ public class ConsoleAction implements Action {
         System.out.println("enter count of student in group:");
         int i = consoleReader.readInt();
         try {
-            List<Group> groupList = GROUP_DAO.findByStudentsCount(i);
+            List<Group> groupList = groupDao.findByStudentsCount(i);
             groupList.forEach(System.out::println);
         } catch (DaoException e) {
             e.printStackTrace();
@@ -56,7 +52,7 @@ public class ConsoleAction implements Action {
         System.out.println("enter course name:");
         String s = consoleReader.readString();
         try {
-            List<Student> studentList = STUDENT_DAO.findStudentsByCourseName(s);
+            List<Student> studentList = studentDao.findStudentsByCourseName(s);
             studentList.forEach(System.out::println);
         } catch (DaoException e) {
             e.printStackTrace();
@@ -83,8 +79,8 @@ public class ConsoleAction implements Action {
         System.out.println("enter student id:");
         int studentId = consoleReader.readInt();
         try {
-            Student student = STUDENT_DAO.getById(studentId).orElseThrow(() -> new IllegalArgumentException("student not found"));
-            STUDENT_DAO.delete(student);
+            Student student = studentDao.getById(studentId).orElseThrow(() -> new IllegalArgumentException("student not found"));
+            studentDao.delete(student);
             System.out.println("successfully delete student:");
             System.out.println(student);
         } catch (DaoException e) {
@@ -104,7 +100,7 @@ public class ConsoleAction implements Action {
             courseList.add(course);
             student.setCourses(courseList);
             try {
-                STUDENT_DAO.update(student);
+                studentDao.update(student);
                 System.out.println(student);
                 System.out.println("successfully add to the course " + course.getName());
             } catch (DaoException e) {
@@ -127,7 +123,7 @@ public class ConsoleAction implements Action {
         if (courseList.remove(course)) {
             //student.setCourses(courseList); No need as courseList is already a reference to the same object
             try {
-                STUDENT_DAO.update(student);
+                studentDao.update(student);
                 System.out.println(student);
                 System.out.println("successfully remove from course " + course.getName());
             } catch (DaoException e) {
@@ -143,10 +139,11 @@ public class ConsoleAction implements Action {
     public void noAction() {
         System.out.println("no action on your enter");
     }
+
     private Optional<Student> scanStudent() {
         System.out.println("enter student id:");
         try {
-            return STUDENT_DAO.getById(consoleReader.readInt());
+            return studentDao.getById(consoleReader.readInt());
         } catch (DaoException e) {
             e.printStackTrace();
             throw new RuntimeDaoException("don't load student", e);
@@ -165,7 +162,7 @@ public class ConsoleAction implements Action {
 
     private int scanGroupId() {
         try {
-            GROUP_DAO.getAll().forEach(System.out::println);
+            groupDao.getAll().forEach(System.out::println);
         } catch (DaoException e) {
             e.printStackTrace();
             throw new RuntimeDaoException("don't load groups", e);
@@ -176,7 +173,7 @@ public class ConsoleAction implements Action {
 
     private void printAllCourses() {
         try {
-            COURSE_DAO.getAll().forEach(System.out::println);
+            courseDao.getAll().forEach(System.out::println);
         } catch (DaoException e) {
             e.printStackTrace();
             throw new RuntimeDaoException("don't load courses", e);
@@ -186,7 +183,7 @@ public class ConsoleAction implements Action {
     private Optional<Course> scanCourse() {
         System.out.println("enter course id from list:");
         try {
-            return COURSE_DAO.getById(consoleReader.readInt());
+            return courseDao.getById(consoleReader.readInt());
         } catch (DaoException e) {
             e.printStackTrace();
             throw new RuntimeDaoException("don't load course", e);
@@ -195,7 +192,7 @@ public class ConsoleAction implements Action {
 
     private void saveStudent(Student student) {
         try {
-            STUDENT_DAO.save(student);
+            studentDao.save(student);
             System.out.println("successfully add student:");
             System.out.println(student);
         } catch (DaoException e) {

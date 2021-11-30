@@ -1,5 +1,6 @@
 package com.foxminded.view;
 
+import com.foxminded.dao.PropertyConnectionProvider;
 import com.foxminded.view.reader.ConsoleReader;
 import com.foxminded.view.action.Action;
 import com.foxminded.view.action.ConsoleAction;
@@ -18,7 +19,7 @@ public class ConsoleMenu {
 
     public ConsoleMenu(Reader consoleReader) {
         this.consoleReader = consoleReader;
-        this.action = new ConsoleAction(consoleReader);
+        this.action = new ConsoleAction(consoleReader, new PropertyConnectionProvider());
     }
 
     public void showMainMenu() {
@@ -42,34 +43,41 @@ public class ConsoleMenu {
     }
 
     public void readFromConsole() {
-        String s = consoleReader.readString();
-        while (!s.equals("q")) {
-            switch (s) {
-                case ("a"):
-                    action.findAllGroupsWithLessOrEqualsStudentsCount();
-                    break;
-                case ("b"):
-                    action.findAllStudentsRelatedToCourse();
-                    break;
-                case ("c"):
-                    action.addNewStudent();
-                    break;
-                case ("d"):
-                    action.deleteStudentById();
-                    break;
-                case ("e"):
-                    action.addStudentToTheCourse();
-                    break;
-                case ("f"):
-                    action.removeStudentFromCourse();
-                    break;
-                default:
-                    action.noAction();
-                    break;
+        // i don't sure about needs this try-with-resources in this place
+        // this is for experience with self-made AutoCloseable
+        try (Reader reader = consoleReader) {
+            String s = reader.readString();
+            while (!s.equals("q")) {
+                switch (s) {
+                    case ("a"):
+                        action.findAllGroupsWithLessOrEqualsStudentsCount();
+                        break;
+                    case ("b"):
+                        action.findAllStudentsRelatedToCourse();
+                        break;
+                    case ("c"):
+                        action.addNewStudent();
+                        break;
+                    case ("d"):
+                        action.deleteStudentById();
+                        break;
+                    case ("e"):
+                        action.addStudentToTheCourse();
+                        break;
+                    case ("f"):
+                        action.removeStudentFromCourse();
+                        break;
+                    default:
+                        action.noAction();
+                        break;
+                }
+                showMainMenu();
+                s = reader.readString();
             }
-            showMainMenu();
-            s = consoleReader.readString();
+        } catch (Exception e) {
+            System.err.println("Can't close reader, maybe it's already close!");
+            e.printStackTrace();
+            throw new IllegalStateException("Can't close reader, maybe it's already close!", e);
         }
-        consoleReader.close();
     }
 }
