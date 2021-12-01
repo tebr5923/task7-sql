@@ -1,14 +1,11 @@
 package com.foxminded.view.action;
 
-import com.foxminded.dao.ConnectionProvider;
 import com.foxminded.dao.CourseDao;
-import com.foxminded.dao.CourseDaoImpl;
 import com.foxminded.dao.DaoException;
+import com.foxminded.dao.DaoFactory;
 import com.foxminded.dao.GroupDao;
-import com.foxminded.dao.GroupDaoImpl;
 import com.foxminded.dao.RuntimeDaoException;
 import com.foxminded.dao.StudentDao;
-import com.foxminded.dao.StudentDaoImpl;
 import com.foxminded.domain.Course;
 import com.foxminded.domain.Group;
 import com.foxminded.domain.Student;
@@ -25,11 +22,11 @@ public class ConsoleAction implements Action {
     private final GroupDao groupDao;
     private final CourseDao courseDao;
 
-    public ConsoleAction(Reader consoleReader, ConnectionProvider connectionProvider) {
+    public ConsoleAction(Reader consoleReader, DaoFactory daoFactory) {
         this.consoleReader = consoleReader;
-        studentDao = new StudentDaoImpl(connectionProvider);
-        groupDao = new GroupDaoImpl(connectionProvider, studentDao);
-        courseDao = new CourseDaoImpl(connectionProvider);
+        studentDao = daoFactory.createStudentDao();
+        groupDao = daoFactory.createGroupDao(studentDao);
+        courseDao = daoFactory.createCourseDao();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.foxminded.view;
 
+import com.foxminded.dao.ConnectionProviderDaoFactory;
 import com.foxminded.dao.PropertyConnectionProvider;
 import com.foxminded.view.reader.ConsoleReader;
 import com.foxminded.view.action.Action;
@@ -19,7 +20,7 @@ public class ConsoleMenu {
 
     public ConsoleMenu(Reader consoleReader) {
         this.consoleReader = consoleReader;
-        this.action = new ConsoleAction(consoleReader, new PropertyConnectionProvider());
+        this.action = new ConsoleAction(consoleReader, new ConnectionProviderDaoFactory(new PropertyConnectionProvider()));
     }
 
     public void showMainMenu() {
