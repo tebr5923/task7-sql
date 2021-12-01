@@ -165,5 +165,4 @@ class CourseDaoImplTest extends AbstractDaoTest {
 
         assertThrows(DaoException.class, () -> courseDao.saveAll(courseList));
     }
-
 }

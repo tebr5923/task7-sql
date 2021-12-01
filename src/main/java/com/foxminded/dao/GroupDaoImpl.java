@@ -5,12 +5,16 @@ import com.foxminded.domain.Student;
 import com.foxminded.mapper.GroupMapper;
 import com.foxminded.mapper.Mapper;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("squid:S106") //dont use logger in this task
+@SuppressWarnings("squid:S106") //don't use logger in this task
 public class GroupDaoImpl implements GroupDao {
     private static final Mapper<Group> GROUP_MAPPER = new GroupMapper();
     private final ConnectionProvider connectionProvider;
@@ -138,8 +142,25 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public void saveAll(List<Group> modelList) throws DaoException {
-        for (Group group : modelList) {
-            save(group);
+        String sql = "INSERT INTO groups (id, name) values(DEFAULT,?);";
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            for (Group model : modelList) {
+                GROUP_MAPPER.map(statement, model);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            System.out.println("All batches ok - SAVE all groups");
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                for (Group model : modelList) {
+                    if (generatedKeys.next()) {
+                        model.setId(generatedKeys.getInt(1));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("all groups NOT SAVE");
+            throw new DaoException("all groups NOT SAVE", e);
         }
     }
 

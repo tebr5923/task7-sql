@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("squid:S106") //dont use logger in this task
+@SuppressWarnings("squid:S106") //don't use logger in this task
 public class CourseDaoImpl implements CourseDao {
     private static final Mapper<Course> COURSE_MAPPER = new CourseMapper();
     private final ConnectionProvider connectionProvider;
@@ -136,9 +136,26 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public void saveAll(List<Course> modelList) throws DaoException{
-        for (Course model : modelList) {
-            save(model);
+    public void saveAll(List<Course> modelList) throws DaoException {
+        String sql = "INSERT INTO courses (id, name, description) values(DEFAULT,?,?);";
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            for (Course model : modelList) {
+                COURSE_MAPPER.map(statement, model);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            System.out.println("All batches ok - SAVE all courses");
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                for (Course model : modelList) {
+                    if (generatedKeys.next()) {
+                        model.setId(generatedKeys.getInt(1));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("all courses NOT SAVE");
+            throw new DaoException("all courses NOT SAVE", e);
         }
     }
 }
