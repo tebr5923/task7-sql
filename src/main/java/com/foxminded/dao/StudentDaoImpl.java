@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("squid:S106") //dont use logger in this task
+@SuppressWarnings("squid:S106") //don't use logger in this task
 public class StudentDaoImpl implements StudentDao {
     private static final Mapper<Student> STUDENT_MAPPER = new StudentMapper();
     private final ConnectionProvider connectionProvider;
@@ -127,9 +127,28 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public void saveAll(List<Student> modelList) throws DaoException {
-        for (Student student : modelList) {
-            save(student);
+        String sql = "INSERT INTO students (id, group_id, first_name, last_name) values(DEFAULT,?,?,?);";
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            for (Student model : modelList) {
+                checkCourses(model.getCourses());
+                STUDENT_MAPPER.map(statement, model);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            System.out.println("All batches ok - SAVE all students");
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                for (Student model : modelList) {
+                    if (generatedKeys.next()) {
+                        model.setId(generatedKeys.getInt("id"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("all students NOT SAVE");
+            throw new DaoException("all students NOT SAVE", e);
         }
+        registerStudentsToCourses(modelList);
     }
 
     @Override
@@ -210,6 +229,26 @@ public class StudentDaoImpl implements StudentDao {
                 statement.setInt(1, studentId);
                 statement.setInt(2, course.getId());
                 statement.addBatch();
+            }
+            statement.executeBatch();
+            System.out.println("All batches ok - students_courses SAVE");
+        } catch (SQLException e) {
+            System.err.println("students_courses NOT SAVE");
+            throw new IllegalStateException("students_courses NOT SAVE", e);
+        }
+    }
+
+    private void registerStudentsToCourses(List<Student> students) {
+        String sql = "INSERT INTO students_courses (student_id, course_id) values(?,?);";
+        try (final Connection connection = connectionProvider.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (Student student : students) {
+                List<Course> courses = student.getCourses();
+                for (Course course : courses) {
+                    statement.setInt(1, student.getId());
+                    statement.setInt(2, course.getId());
+                    statement.addBatch();
+                }
             }
             statement.executeBatch();
             System.out.println("All batches ok - students_courses SAVE");
